@@ -1,0 +1,21 @@
+{% extends "base.htm" %}
+
+{% block body %}
+    <div id="wrapper">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">NetBot - Admin</li>
+                <li><a href="{{url_for('views.home')}}">Status</a></li>
+                <li><a href="{{url_for('views.home')}}">Settings</a></li>
+            </ul>
+        </div>
+        {% block content %} {% endblock %}
+    </div>
+{% endblock %}
+
+<script>
+$("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("active");
+});
+</script>

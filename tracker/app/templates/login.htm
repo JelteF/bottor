@@ -1,0 +1,27 @@
+{% extends "base.htm" %}
+
+{% block includes %}
+    <link rel="stylesheet" href="/static/css/login_style.css" media="screen" type="text/css" />
+{% endblock %}
+
+{% block body %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class=flashes>
+            {% for category, message in messages %}
+                <div class="alert alert-dismissable alert-{{ category }}"><h3>{{ message }}</h3></li>
+            {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <div id="login-form">
+        <h3>Login - NetBot</h3>
+        <fieldset>
+            <form method="post">
+                <input type="text" name="name" required placeholder="Username">
+                <input type="password" name="password" required placeholder="Password">
+                <input type="submit" value="Login">
+            </form>
+        </fieldset>
+    </div>
+{% endblock %}

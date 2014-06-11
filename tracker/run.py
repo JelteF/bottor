@@ -1,3 +1,4 @@
+#!venv/bin/python
 """run.py - Run the application.
 
 Flask-Failsafe ensures that when the application crashes, it can still restart

@@ -1,3 +1,4 @@
+#!venv/bin/python
 """create_db.py - Initialize the database.
 
 This script removes any existing databases (app/*.sqlite and

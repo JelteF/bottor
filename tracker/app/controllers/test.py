@@ -1,10 +1,9 @@
-from BotMatrix import BotMatrix
-from Job import Job
+from app.controllers.matrix import MatrixController
 
-matrixA = BotMatrix("../sample_matrices/A50")
-matrixB = BotMatrix("../sample_matrices/B50")
+matrix = MatrixController.create("../sample_matrices/A50")
 
-jobManager = JobManager()
-job = Job(matrixA, matrixB)
+array = MatrixController.loadAsArray(matrix)
 
-jobManager.addJob(job)
+MatrixController.writeArrayToFile(array, "../sample_matrices/test")
+
+MatrixController.delete(matrix)

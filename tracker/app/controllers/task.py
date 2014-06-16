@@ -1,17 +1,9 @@
 from datetime import datetime
 from Job import Job
+from tracker.models.task import Task
+from tracker import db
 
-class Task:
-    def __init__(self, job, startRow, startCol, nRows, nCols):
-        self.job = job
-        self.startRow = startRow
-        self.startCol = startCol
-        self.nRows = nRows
-        self.nCols = nCols
-        self.startTime = datetime.now()
-        self.toComplete = nRows * nCols
-        self.completed = 0
-
+class TaskController:
     def getRows(self):
         result = []
         for i in range(nRows):

@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
@@ -5,6 +6,12 @@ from flask.ext.login import LoginManager
 # Startup stuff
 app = Flask(__name__)
 app.config.from_object('config')
+
+# This is the path to the upload directory
+app.config['UPLOAD_FOLDER'] = 'static/matrix/'
+# These are the extension that we are accepting to be uploaded
+app.config['ALLOWED_EXTENSIONS'] = set(['txt'])
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -17,6 +24,7 @@ from app.api import *
 from app.views.views import views_blueprint
 from app.views.login import login_blueprint
 
+app.register_blueprint(peer_api)
 app.register_blueprint(views_blueprint)
 app.register_blueprint(login_blueprint)
 
@@ -30,3 +38,4 @@ from app.utils import serialize_sqla
 import json
 app.jinja_env.globals.update(json=json)
 app.jinja_env.globals.update(serialize_sqla=serialize_sqla)
+app.jinja_env.globals.update(len=len)

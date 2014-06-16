@@ -3,6 +3,7 @@ Hoofdtaak: Client
 ### Week 2
 - Literatuuronderzoek naar structuur en protocol van bestaande botnets
 - Samenwerken met Jaap om een protocol samen te stellen tussen client en server
+- Libraries uitzoeken voor gebruik in de client
 
 ### Week 3
 - Vermenigvuldigen van rijen en kolommen in de in de vorm van de api

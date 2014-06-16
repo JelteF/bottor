@@ -11,3 +11,9 @@
     <script src="/static/js/backbone-min.js"></script>
     <script src="/static/js/backbone_base.js"></script>
     <script src="/static/js/utils.js"></script>
+
+{% if data %}
+    <script>
+        netbot = {{json.dumps(serialize_sqla(data)) | safe}};
+    </script>
+{% endif %}

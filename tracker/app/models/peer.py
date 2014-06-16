@@ -1,19 +1,15 @@
-"""piece.py - Product model."""
+"""peer.py - Peer model."""
 from app import db
 from app.utils.base_model import BaseEntity
 
 
 class Peer(db.Model, BaseEntity):
     """Piece model."""
-    __tablename__ = 'piece'
+    __tablename__ = 'peer'
 
-    prints = ['id', 'name']
+    prints = ['id', 'location']
 
-    name = db.Column(db.String(256))
-    description = db.Column(db.Text)
     location = db.Column(db.String(256))
 
-    def __init__(self, name='', description='', location=''):
-        self.name = name
-        self.description = description
+    def __init__(self, location=''):
         self.location = location

@@ -1,1 +1,3 @@
-"""__init__.py - Models."""
+"""__init__.py - API's."""
+
+from .peer import peer_api

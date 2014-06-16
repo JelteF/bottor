@@ -1,14 +1,18 @@
 Task:
-
 {
-    id: x,
-    sequence: {
-        matrix: A/B,
-        type: R/C,
-        number: N,
-        sequence: [3, 4, 5, 6, 1, 23, 4, 4]
-    }
-
+    id: 2,
+    rows: [
+        {
+            number: 1,
+            sequence: [1, 4, 5]
+        }
+    ],
+    columns: [
+        {
+            number: 1,
+            sequence: [1, 4, 5]
+        }
+    ]
 }
 
 

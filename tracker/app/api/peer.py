@@ -24,7 +24,7 @@ def ping():
     """ Get ping from peer"""
     print(request.json)
 
-    return jsonify("ack")
+    return jsonify()
 
 
 @peer_api.route('/<int:peer_id>', methods=['DELETE'])

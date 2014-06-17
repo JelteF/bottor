@@ -34,22 +34,14 @@ def main():
 
     _id = handshake()
 
-    try:
-        task = request_task(_id)
-    except:
-        task = default_task
-
-    answer = calculate_answer(task)
-
-    send_result(answer)
-    """
     do_every(0.5, send_cpu_ping)
 
     while(1):
-        if have_to_wait:
-            time.sleep(1)
-        a = 5*200022020202020
-    """
+        task = request_task(_id)
+        answer = calculate_answer(task)
+
+        send_result(answer)
+
 
 
 """
@@ -71,12 +63,12 @@ def handshake():
 
 
 def request_task(_id):
-    return requests.get(URL + '/api/request_task/' + _id).json()
+    return requests.get(URL + '/api/task/request_task/' + str(_id)).json()
 
 
 def send_result(answer):
     data = json.dumps(answer)
-    requests.post(URL + '/api/send_result', data=data, headers=json_header)
+    requests.post(URL + '/api/task/send_result', data=data, headers=json_header)
 
 
 def send_cpu_ping():
@@ -102,15 +94,16 @@ def calculate_answer(task):
         ]
     }
 
-    for r in task['rows']:
-        for c in task['columns']:
-            answer['results'].append({'row': r['number'], 'col': c['number']})
+    for row_num, r in task['rows'].items():
+        for col_num, c in task['columns'].items():
+            answer['results'].append({'row': row_num, 'col': col_num})
             total = 0
 
-            for i in range(len(r['sequence'])):
+            for i in range(len(r)):
                 if have_to_wait:
                     time.sleep(1)
-                total += r['sequence'][i] * c['sequence'][i]
+                print(r[i], c[i])
+                total += r[i] * c[i]
 
             answer['results'][-1]['value'] = total
 

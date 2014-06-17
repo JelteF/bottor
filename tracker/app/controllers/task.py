@@ -2,6 +2,7 @@ from datetime import datetime
 from app import db
 from flask import jsonify
 from app.controllers.matrix import MatrixController
+from pprint import pprint
 
 
 from app.models.task import Task
@@ -48,8 +49,8 @@ class TaskController:
     def getAsJson(task):
         from app.controllers.job import JobController
         json = {}
-        rows = []
-        cols = []
+        rows = {}
+        cols = {}
 
         job = JobController.get(task.job)
         matrixA = MatrixController.get(job.matrixA)
@@ -57,10 +58,12 @@ class TaskController:
 
         for i in range(task.nRows):
             row = MatrixController.getRow(matrixA, task.startRow + i)
-            rows.append({ task.startRow + i : row })
+            rows[task.startRow + i] = row
 
         for i in range(task.nCols):
             col = MatrixController.getRow(matrixB, task.startCol + i)
-            cols.append({ task.startCol + i : col })
+            cols[task.startCol + i] =  col
+
+        pprint(cols)
 
         return jsonify(id=task.id, rows=rows, columns=cols)

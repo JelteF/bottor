@@ -90,12 +90,11 @@ class TrackerTestCase(unittest.TestCase):
         job2 = JobController.getJobWithFreeTask()
         assert job2
 
-        with app.test_client() as c, app.app_context():
-            resp = c.get('/api/task/request_task/%d' % (1))
-            data = json.loads(resp.data)
-            assert 'rows' in data
-            assert 'id' in data
-            print (data)
+        # with app.test_client() as c, app.app_context():
+        #     resp = c.get('/api/task/request_task/%d' % (1))
+        #     data = json.loads(resp.data)
+        #     self.assert data['id']
+            
 
 
 

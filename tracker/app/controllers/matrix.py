@@ -98,7 +98,9 @@ class MatrixController:
 
         matrix_array = MatrixController.loadAsArray(matrix)
 
-        return matrix_array[n]
+        result = [float(i) for i in matrix_array[n]]
+
+        return result
 
     @staticmethod
     def getColumn(matrix, n):
@@ -110,7 +112,7 @@ class MatrixController:
         matrix_array = MatrixController.loadAsArray(matrix)
 
         for i in range(matrix.nRows):
-            result.append(matrix_array[i][n])
+            result.append(float(matrix_array[i][n]))
 
         return result
 

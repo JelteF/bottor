@@ -16,6 +16,7 @@ def get(peer_id):
 
 @task_api.route('/send_result', methods=['POST'])
 def result():
+    peer_id = 0
     result = request.json
 
     task_id = result['id']
@@ -24,5 +25,5 @@ def result():
         row = res['row']
         col = res['col']
         value = res['value']
-        TaskManager.setResult(task_id, row, col, value)
+        TaskManager.setResult(peer_id, task_id, row, col, value)
    

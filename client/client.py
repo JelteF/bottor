@@ -34,7 +34,7 @@ def main():
 
 
 def handshake():
-    data = json.dumps({'secret': 'BILIKETURTLES'})
+    data = json.dumps({'secret': 'ILIKETURTLES'})
     r = requests.post(URL + '/api/peer', data=data, headers=json_header)
     return r.json()['id']
 

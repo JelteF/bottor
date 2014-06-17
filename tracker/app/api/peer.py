@@ -1,5 +1,6 @@
 """peer.py - Controller for Peer."""
 from flask import Blueprint, jsonify, request
+from app import app
 from app.controllers import PeerController
 from app.utils import serialize_sqla
 from app.views import login
@@ -10,7 +11,8 @@ peer_api = Blueprint('peer_api', __name__, url_prefix='/api/peer')
 @peer_api.route('', methods=['POST'])
 def create():
     """ Create new peer """
-    print(request)
+    if request.json['secret'] != app.config['CLIENT_HANDSHAKE']:
+        return jsonify(), 401
 
     # peer = PeerController.create(peer_dict)
 

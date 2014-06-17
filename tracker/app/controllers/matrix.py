@@ -2,15 +2,35 @@ from app.models.matrix import Matrix
 from app import db
 import os.path
 
+# class InvalidMatrixException(Exception):
+#     status_code = 400
+#     def __init__(self, message, status_code=None, payload=None):
+#         Exception.__init__(self)
+#         self.message = message
+#         if status_code is not None:
+#             self.status_code = status_code
+#         self.payload = payload
+
+#     def to_dict(self):
+#         rv = dict(self.payload or ())
+#         rv['message'] = self.message
+#         return rv
+
+# class MatrixFileExists(Exception):
+#     status_code = 400
+#     def __init__(self, message, status_code=None, payload=None):
+#         Exception.__init__(self)
+#         self.message = message
+#         if status_code is not None:
+#             self.status_code = status_code
+#         self.payload = payload
+
+#     def to_dict(self):
+#         rv = dict(self.payload or ())
+#         rv['message'] = self.message
+#         return rv
+
 class MatrixController:
-    class InvalidMatrixError(Exception):
-        def __init__(self, arg):
-            self.args = arg
-
-    class MatrixFileExists(Exception):
-        def __init__(self, arg):
-            self.args = arg
-
 
     @staticmethod
     def create(filename):
@@ -27,7 +47,7 @@ class MatrixController:
                 colCnt = len(columns)
             else:
                 if colCnt is not len(columns):
-                    raise InvalidMatrixException("Different column lengths found")
+                    print("WRONG")
 
         mFile.close()
 

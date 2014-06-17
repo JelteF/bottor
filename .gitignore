@@ -53,5 +53,5 @@ coverage.xml
 docs/_build/
 
 # Result/task matrices
-tracker/task_matrices/
-tracker/result_matrices/
+resmtrx*
+taskmtrx*

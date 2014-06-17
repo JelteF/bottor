@@ -34,27 +34,32 @@ def main():
 
     _id = handshake()
 
-    do_every(0.5, send_cpu_ping)
+    do_every(0.5, send_cpu_ping, _id)
 
     while(1):
+        print('Requesting new task')
         task = request_task(_id)
+        print('Received task')
+        print('Calculating answer')
         answer = calculate_answer(task)
+        print('Calculated answer')
 
+
+        print('Sending answer')
         send_result(answer)
+        print('Sent answer')
 
 
 
 """
 http://stackoverflow.com/a/11488902
 """
-def do_every (interval, worker_func, iterations=0):
-    if iterations != 1:
-        threading.Timer(interval, do_every,
-                        [interval, worker_func,
-                         0 if iterations == 0 else iterations-1]
-        ).start ();
+def do_every (interval, worker_func, *args, **kwargs):
+    new_args = [interval, worker_func]
+    temp = new_args.extend(args)
+    threading.Timer(interval, do_every, new_args, kwargs).start();
 
-    worker_func()
+    worker_func(*args, **kwargs)
 
 def handshake():
     data = json.dumps({'secret': 'ILIKETURTLES'})
@@ -71,11 +76,12 @@ def send_result(answer):
     requests.post(URL + '/api/task/send_result', data=data, headers=json_header)
 
 
-def send_cpu_ping():
+def send_cpu_ping(_id):
     load, own_load = get_load()
 
     data = json.dumps({'load': load, 'own_load': own_load})
-    requests.post(URL + '/api/peer/ping', data=data, headers=json_header)
+    requests.post(URL + '/api/peer/ping/' + str(_id),
+                  data=data, headers=json_header)
 
 
 def get_load():
@@ -102,6 +108,7 @@ def calculate_answer(task):
 
             for i in range(len(r)):
                 if have_to_wait:
+                    print('waiting')
                     time.sleep(1)
                 total += r[i] * c[i]
 

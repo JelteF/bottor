@@ -25,9 +25,9 @@ class Job(db.Model, BaseEntity):
         self.resultRows = matrixB.nCols
         fname = time.strftime("%Y%m%d-%H%M%S")
         resMatrix = MatrixController.createEmptyMatrix( \
-            self.resultRows, self.resultCols, "#", 'result_matrices/resmtrx' + fname)
+            self.resultRows, self.resultCols, "#", 'result_matrices/' + fname + '.botmatrix')
         taskMatrix = MatrixController.createEmptyMatrix( \
-            self.resultRows, self.resultCols, "0", 'task_matrices/taskmtrx' + fname)
+            self.resultRows, self.resultCols, "0", 'task_matrices/' + fname + '.botmatrix')
         self.matrixA = matrixA.id
         self.matrixB = matrixB.id
         self.completed = 0

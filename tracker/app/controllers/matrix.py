@@ -2,7 +2,6 @@ from app.models.matrix import Matrix
 from app import db
 import os.path
 
-
 class MatrixController:
     class InvalidMatrixError(RuntimeError):
         def __init__(self, arg):
@@ -70,9 +69,9 @@ class MatrixController:
         for i in range(nRows):
             for j in range(nCols):
                 if j == 0:
-                    output = output + matrix[i][j]
+                    output = output + str(matrix[i][j])
                 else:
-                    output = output + " " + matrix[i][j]
+                    output = output + " " + str(matrix[i][j])
             output = output + "\n"
             
         mFile = open(filename, "w+")

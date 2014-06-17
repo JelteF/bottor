@@ -1,10 +1,11 @@
 from app import db
-from app.models.task import Task
 from app.models.job import Job
 from app.controllers.matrix import MatrixController
+from app.controllers.task import TaskController
 
 
 class JobController:
+
     class IllegalSizeException(Exception):
         def __init__(self, arg):
             self.args = arg
@@ -14,7 +15,10 @@ class JobController:
         if matrixA.nCols is not matrixB.nRows:
             raise IllegalSizeException("Columns A is not rows B")
 
-        return Job(matrixA, matrixB)
+        job = Job(matrixA, matrixB)
+        db.session.add(job)
+        db.session.commit()
+        return job
 
     @staticmethod
     def delete(job):
@@ -35,7 +39,7 @@ class JobController:
 
     @staticmethod
     def getTask(job, peer_id):
-        matrix = job.taskMatrix
+        matrix = MatrixController.get(job.taskMatrix)
         taskMatrix = MatrixController.loadAsArray(matrix)
 
         startRow = 0
@@ -44,6 +48,7 @@ class JobController:
         TASK_SIZE = 3
         STATE_WORKING = "1"
         STATE_NONE = "0"
+        STATE_DONE = "2"
 
         # Find first 0 in taskMatrix
         while (taskMatrix[startRow][startCol] is not STATE_NONE):
@@ -79,21 +84,25 @@ class JobController:
         job.running += nCols * nRows
         job.free -= nCols * nRows
 
-        return Task(job, peer, startRow, startCol, nRows, nCols)
+        return TaskController.create(job, peer_id, startRow, startCol, nRows, nCols)
 
     # def changeState(matrix, state, row, col):
     #     matrix[row][col] = state
 
     def setResult(job, row, col, result):
-        resultMatrix = MatrixController.loadAsArray(job.resultMatrix)
-        taskMatrix = MatrixController.loadAsArray(job.taskMatrix)
+        STATE_DONE = "2"
+
+        rMatrix = MatrixController.get(job.resultMatrix)
+        tMatrix = MatrixController.get(job.taskMatrix)
+        resultMatrix = MatrixController.loadAsArray(rMatrix)
+        taskMatrix = MatrixController.loadAsArray(tMatrix)
 
         resultMatrix[row][col] = result
         taskMatrix[row][col] = STATE_DONE
         job.completed += 1
         job.running -= 1
-        MatrixController.writeArrayToFile(resultMatrix, job.resultMatrix.filename)
-        MatrixController.writeArrayToFile(taskMatrix, job.taskMatrix.filename)
+        MatrixController.writeArrayToFile(resultMatrix, rMatrix.filename)
+        MatrixController.writeArrayToFile(taskMatrix, tMatrix.filename)
 
 
     # def isFinished(self):

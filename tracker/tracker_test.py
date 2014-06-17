@@ -1,11 +1,14 @@
 import unittest
 import os
+import json
 
 from glob import glob
 from app import app, db
+from app.models.matrix import Matrix
 from app.controllers.matrix import MatrixController
 from app.controllers.job import JobController
-from app.models.job import Job
+from app.controllers.taskmanager import TaskManager
+from app.controllers.task import TaskController
 
 class TrackerTestCase(unittest.TestCase):
     def create_app(self):
@@ -56,13 +59,44 @@ class TrackerTestCase(unittest.TestCase):
         job = JobController.create(matrixA, matrixB)
         assert job
 
-        #resMatrix = MatrixController.get(job.matrixA)
-        resMatrix = job.matrixA
+        resMatrix = MatrixController.get(job.matrixA)
         array = MatrixController.loadAsArray(resMatrix)
         MatrixController.writeArrayToFile(array, "sample_matrices/test3")
 
-        JobController.getTask(job)
-        JobController.getTask(job)
+        JobController.getTask(job, 1)
+        task = JobController.getTask(job, 1)
+        assert task
+        job2 = JobController.getJobWithFreeTask()
+        assert job2
+
+    def testTaskManager(self):
+        matrixA = MatrixController.create("sample_matrices/A20")
+        matrixB = MatrixController.create("sample_matrices/B20")
+        result = Matrix.query.all()
+        print (len(result))
+        job = JobController.create(matrixA, matrixB)
+        assert job
+        job2 = JobController.getJobWithFreeTask()
+        assert job2
+        task = TaskManager.getTask(1)
+        assert task
+        TaskController.setResult(task, 5, 19, 69)
+
+    def testTaskAPI(self):
+        matrixA = MatrixController.create("sample_matrices/A20")
+        matrixB = MatrixController.create("sample_matrices/B20")
+        job = JobController.create(matrixA, matrixB)
+
+        with app.test_client() as c, app.app_context():
+            resp = c.get('/api/task/request_task/%d' % (1))
+            data = json.loads(resp.data)
+            assert 'rows' in data
+            assert 'id' in data
+            print (data)
+
+        return
+
+
 
 
 

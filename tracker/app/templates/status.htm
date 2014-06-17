@@ -1,6 +1,7 @@
 {% extends "body.htm" %}
 
 {% block includes %}
+    <link href="/static/css/status_style.css" rel="stylesheet">
     <script src="/static/js/status.js"></script>
 {% endblock %}
 
@@ -26,7 +27,18 @@
     <script type="text/template" id="peer-view-template">
     <% _.each(peers, function(peer) { %>
         <tr data-id='<%= peer.get('id') %>'>
-            <td><%= peer.get('id') %></td>
+            <td>
+                <div class="peerid"
+                    <% if(peer.get('active') == true){
+                        print("style='background: #5cb85c'");
+                    }else{
+                        print("style='background: #d9534f'");
+                    }%>
+                >
+
+                    <span> <%= peer.get('id') %> </span>
+                <div>
+            </td>
             <td><%= peer.get('location') %></td>
             <td>50:50</td>
             <td>

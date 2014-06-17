@@ -26,4 +26,3 @@ class Task(db.Model, BaseEntity):
         self.toComplete = nRows * nCols
         self.completed = 0
         self.peer = peer
-

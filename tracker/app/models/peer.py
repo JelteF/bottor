@@ -9,7 +9,11 @@ class Peer(db.Model, BaseEntity):
 
     prints = ['id', 'location']
 
+    active = db.Column(db.Boolean)
     location = db.Column(db.String(256))
+    CPU = db.Column(db.Integer)
 
     def __init__(self, location=''):
+        self.active = False
         self.location = location
+        self.CPU = 0

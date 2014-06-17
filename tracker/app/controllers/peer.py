@@ -4,9 +4,12 @@ from app.models import Peer
 
 class PeerController:
     @staticmethod
-    def create(peer_dict):
+    def create(peer):
         """Create peer by peer dict."""
-        peer = Peer.new_dict(peer_dict)
+        if type(peer) is dict:
+            peer = Peer.new_dict(peer)
+        else:
+            peer = Peer(peer)
 
         db.session.add(peer)
         db.session.commit()
@@ -24,7 +27,7 @@ class PeerController:
         return Peer.query.all()
 
     @staticmethod
-    def delete(product):
-        """ Delete product item """
-        db.session.delete(product)
+    def delete(peer):
+        """ Delete peer item """
+        db.session.delete(peer)
         db.session.commit()

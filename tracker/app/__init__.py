@@ -1,4 +1,3 @@
-import os
 from flask import Flask, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
@@ -11,7 +10,8 @@ app.config.from_object('config')
 app.config['UPLOAD_FOLDER'] = 'static/matrix/'
 # These are the extension that we are accepting to be uploaded
 app.config['ALLOWED_EXTENSIONS'] = set(['txt'])
-
+# code for clienthandshake
+app.config['CLIENT_HANDSHAKE'] = 'ILIKETURTLES'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -25,7 +25,7 @@ from app.api.task import task_api
 from app.views.views import views_blueprint
 from app.views.login import login_blueprint
 
-#app.register_blueprint(peer_api)
+app.register_blueprint(peer_api)
 app.register_blueprint(views_blueprint)
 app.register_blueprint(login_blueprint)
 app.register_blueprint(task_api)

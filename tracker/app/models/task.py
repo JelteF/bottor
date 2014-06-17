@@ -14,7 +14,7 @@ class Task(db.Model, BaseEntity):
     startTime = db.Column(DateTime, default=datetime.now)
     toComplete = db.Column(Integer)
     completed = db.Column(Integer)
-    peer = db.Column(Integer, Foreignkey('peer.id'))
+    peer = db.Column(Integer, ForeignKey('peer.id'))
 
     def __init__(self, job, peer, startRow, startCol, nRows, nCols):
         self.job = job

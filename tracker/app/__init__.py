@@ -10,7 +10,8 @@ app.config.from_object('config')
 app.config['UPLOAD_FOLDER'] = 'static/matrix/'
 # These are the extension that we are accepting to be uploaded
 app.config['ALLOWED_EXTENSIONS'] = set(['txt'])
-
+# code for clienthandshake
+app.config['CLIENT_HANDSHAKE'] = 'ILIKETURTLES'
 
 login_manager = LoginManager()
 login_manager.init_app(app)

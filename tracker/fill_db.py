@@ -24,3 +24,11 @@ db.session.commit()
 matrixA = MatrixController.create("sample_matrices/A500")
 matrixB = MatrixController.create("sample_matrices/B500")
 job = JobController.create(matrixA, matrixB)
+
+matrixA = MatrixController.create("sample_matrices/A500")
+matrixB = MatrixController.create("sample_matrices/B500")
+job = JobController.create(matrixA, matrixB)
+
+matrixA = MatrixController.create("sample_matrices/A500")
+matrixB = MatrixController.create("sample_matrices/B500")
+job = JobController.create(matrixA, matrixB)

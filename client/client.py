@@ -96,7 +96,8 @@ def calculate_answer(task):
 
     for row_num, r in task['rows'].items():
         for col_num, c in task['columns'].items():
-            answer['results'].append({'row': row_num, 'col': col_num})
+            answer['results'].append({'row': int(row_num),
+                                      'col': int(col_num)})
             total = 0
 
             for i in range(len(r)):

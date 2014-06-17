@@ -102,12 +102,11 @@ def calculate_answer(task):
             for i in range(len(r)):
                 if have_to_wait:
                     time.sleep(1)
-                print(r[i], c[i])
                 total += r[i] * c[i]
 
             answer['results'][-1]['value'] = total
 
-    pprint(answer)
+    print('Finished task: ' + str(task['id']))
     return answer
 
 

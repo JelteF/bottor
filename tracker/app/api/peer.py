@@ -10,7 +10,7 @@ peer_api = Blueprint('peer_api', __name__, url_prefix='/api/peer')
 @peer_api.route('', methods=['POST'])
 def create():
     """ Create new peer """
-    print request
+    print(request)
 
     # peer = PeerController.create(peer_dict)
 

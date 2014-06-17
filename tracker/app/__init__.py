@@ -1,4 +1,3 @@
-import os
 from flask import Flask, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
@@ -25,7 +24,7 @@ from app.api.task import task_api
 from app.views.views import views_blueprint
 from app.views.login import login_blueprint
 
-#app.register_blueprint(peer_api)
+app.register_blueprint(peer_api)
 app.register_blueprint(views_blueprint)
 app.register_blueprint(login_blueprint)
 app.register_blueprint(task_api)

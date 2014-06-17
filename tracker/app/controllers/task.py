@@ -64,6 +64,4 @@ class TaskController:
             col = MatrixController.getRow(matrixB, task.startCol + i)
             cols[task.startCol + i] =  col
 
-        pprint(cols)
-
         return jsonify(id=task.id, rows=rows, columns=cols)

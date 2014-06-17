@@ -21,14 +21,14 @@ peer1.active = True
 db.session.add(peer1)
 db.session.commit()
 
-matrixA = MatrixController.create("sample_matrices/A500")
-matrixB = MatrixController.create("sample_matrices/B500")
+matrixA = MatrixController.create("sample_matrices/A50")
+matrixB = MatrixController.create("sample_matrices/B50")
 job = JobController.create(matrixA, matrixB)
 
-matrixA = MatrixController.create("sample_matrices/A500")
-matrixB = MatrixController.create("sample_matrices/B500")
+matrixA = MatrixController.create("sample_matrices/A50")
+matrixB = MatrixController.create("sample_matrices/B50")
 job = JobController.create(matrixA, matrixB)
 
-matrixA = MatrixController.create("sample_matrices/A500")
-matrixB = MatrixController.create("sample_matrices/B500")
+matrixA = MatrixController.create("sample_matrices/A50")
+matrixB = MatrixController.create("sample_matrices/B50")
 job = JobController.create(matrixA, matrixB)

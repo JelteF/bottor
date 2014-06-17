@@ -3,9 +3,14 @@ from app import db
 import os.path
 
 class MatrixController:
-    class InvalidMatrixError(RuntimeError):
+    class InvalidMatrixError(Exception):
         def __init__(self, arg):
             self.args = arg
+
+    class MatrixFileExists(Exception):
+        def __init__(self, arg):
+            self.args = arg
+
 
     @staticmethod
     def create(filename):
@@ -22,7 +27,7 @@ class MatrixController:
                 colCnt = len(columns)
             else:
                 if colCnt is not len(columns):
-                    raise InvalidMatrixError("Different column lengths found")
+                    raise InvalidMatrixException("Different column lengths found")
 
         mFile.close()
 
@@ -59,8 +64,10 @@ class MatrixController:
 
     @staticmethod
     def writeArrayToFile(matrix, filename, new=False):
-        if new and os.path.isfile(filename):
-            raise MatrixFileExists("Filename for new file already exists")
+        i = 1
+        while new and os.path.isfile(filename):
+            filename = filename + "[" + str(i) + "]"
+            i += 1
 
         nRows = len(matrix)
         nCols = len(matrix[0])

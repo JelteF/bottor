@@ -86,6 +86,9 @@ class TrackerTestCase(unittest.TestCase):
         matrixA = MatrixController.create("sample_matrices/A20")
         matrixB = MatrixController.create("sample_matrices/B20")
         job = JobController.create(matrixA, matrixB)
+        assert job
+        job2 = JobController.getJobWithFreeTask()
+        assert job2
 
         with app.test_client() as c, app.app_context():
             resp = c.get('/api/task/request_task/%d' % (1))
@@ -93,9 +96,6 @@ class TrackerTestCase(unittest.TestCase):
             assert 'rows' in data
             assert 'id' in data
             print (data)
-
-        return
-
 
 
 

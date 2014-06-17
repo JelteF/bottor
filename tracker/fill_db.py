@@ -7,6 +7,8 @@ the system.
 """
 from app import db
 from app.models import *
+from app.controllers.job import JobController
+from app.controllers.matrix import MatrixController
 from werkzeug.security import generate_password_hash
 
 #Main account
@@ -17,3 +19,7 @@ db.session.commit()
 peer1 = Peer('77.249.206.212')
 db.session.add(peer1)
 db.session.commit()
+
+matrixA = MatrixController.create("sample_matrices/A20")
+matrixB = MatrixController.create("sample_matrices/B20")
+job = JobController.create(matrixA, matrixB)

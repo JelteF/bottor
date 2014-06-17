@@ -19,9 +19,10 @@ def result():
     result = request.json
 
     task_id = result['id']
-    row = result['results']['row']
-    col = result['results']['col']
-    value = result['results']['value']
 
-    TaskManager.setResult(task_id, row, col, value)
-
+    for res in result['results']:
+        row = res['row']
+        col = res['col']
+        value = res['value']
+        TaskManager.setResult(task_id, row, col, value)
+   

@@ -1,0 +1,12 @@
+div.peerid{
+    display: table;
+	width: 35px;
+    height: 35px;
+}
+
+div.peerid span {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    color: white
+}

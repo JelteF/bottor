@@ -14,9 +14,17 @@ def create():
     if request.json['secret'] != app.config['CLIENT_HANDSHAKE']:
         return jsonify(), 401
 
-    # peer = PeerController.create(peer_dict)
+    peer = PeerController.create(request.remote_addr)
 
-    return jsonify(id=1337)
+    return jsonify(id=peer.id)
+
+
+@peer_api.route('/ping', methods=['POST'])
+def ping():
+    """ Get ping from peer"""
+    print(request.json)
+
+    return jsonify("ack")
 
 
 @peer_api.route('/<int:peer_id>', methods=['DELETE'])

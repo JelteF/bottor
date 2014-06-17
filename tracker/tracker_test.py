@@ -1,11 +1,11 @@
 import unittest
 import os
+
 from glob import glob
-
 from app import app, db
-
 from app.controllers.matrix import MatrixController
 from app.controllers.job import JobController
+from app.models.job import Job
 
 class TrackerTestCase(unittest.TestCase):
     def create_app(self):
@@ -56,7 +56,8 @@ class TrackerTestCase(unittest.TestCase):
         job = JobController.create(matrixA, matrixB)
         assert job
 
-        resMatrix = MatrixController.get(job.matrixA)
+        #resMatrix = MatrixController.get(job.matrixA)
+        resMatrix = job.matrixA
         array = MatrixController.loadAsArray(resMatrix)
         MatrixController.writeArrayToFile(array, "sample_matrices/test3")
 

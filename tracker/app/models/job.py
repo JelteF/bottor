@@ -15,6 +15,8 @@ class Job(db.Model, BaseEntity):
     toComplete = db.Column(db.Integer)
     resultMatrix = db.Column(Integer, ForeignKey('matrix.id'))
     taskMatrix = db.Column(Integer, ForeignKey('matrix.id'))
+    running = db.Column(db.Integer)
+    free = db.Column(db.Integer)
 
 
 
@@ -26,10 +28,12 @@ class Job(db.Model, BaseEntity):
             self.resultRows, self.resultCols, "#", 'result_matrices/' + fname)
         taskMatrix = MatrixController.createEmptyMatrix( \
             self.resultRows, self.resultCols, "0", 'task_matrices/' + fname)
-        self.matrixA = matrixA.id
-        self.matrixB = matrixB.id
+        self.matrixA = matrixA
+        self.matrixB = matrixB
         self.completed = 0
+        self.running = 0
         self.toComplete = self.resultCols * self.resultRows
-        self.resultMatrix = resMatrix.id
-        self.taskMatrix = taskMatrix.id
+        self.free = self.toComplete
+        self.resultMatrix = resMatrix
+        self.taskMatrix = taskMatrix
 

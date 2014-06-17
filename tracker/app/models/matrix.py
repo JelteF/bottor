@@ -9,7 +9,8 @@ class Matrix(db.Model, BaseEntity):
     nCols = db.Column(db.Integer)
     filename = db.Column(db.String(256))
 
-
+    # job = db.relationship('Job', foreign_keys=[Job.matrixA, Job.matrixB,
+    #     Job.resultMatrix, Job.taskMatrix])
 
     def __init__(self, filename, nRows, nCols):
         self.nRows = nRows

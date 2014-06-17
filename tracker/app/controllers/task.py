@@ -1,26 +1,33 @@
 from datetime import datetime
-from Job import Job
-from tracker.models.task import Task
-from tracker import db
+import app.models
+from app import db
 
 class TaskController:
-    def getRows(self):
-        result = []
-        for i in range(nRows):
-            result.append(self.job.matrixA.getRow(startRow + i))
 
-        return result
+    def get(task_id):
+        return Task.query.get(task_id)
 
-    def getColumns(self):
-        result = []
-        for i in range(nCols):
-            result.append(self.job.matrixB.getColumn(startCol + i))
+    # def getRows(task):
+    #     result = []
+    #     for i in range(nRows):
+    #         result.append(self.job.matrixA.getRow(startRow + i))
 
-        return result
+    #     return result
 
-    def setResult(self, result, row, col):
-        self.job.setResult(result, row, col)
-        self.completed += 1
+    # def getColumns(task):
+    #     result = []
+    #     for i in range(nCols):
+    #         result.append(self.job.matrixB.getColumn(startCol + i))
 
-    def getRunningTime(self):
-        return datetime.now() - self.startTime
+    #     return result
+
+    def setResult(task, row, col, value):
+        task.completed += 1
+        JobController.setResult(task.job, row, col, value)
+
+    def getRunningTime(task):
+        return datetime.now() - task.startTime
+
+    def isCompleted(task):
+        return task.toComplete == task.completed
+

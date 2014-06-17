@@ -1,7 +1,7 @@
 """views.py - View for administration."""
 from flask import render_template, Blueprint
 from app.views import login
-from app.controllers import PeerController
+#from app.controllers import PeerController
 
 views_blueprint = Blueprint('views', __name__, url_prefix='')
 

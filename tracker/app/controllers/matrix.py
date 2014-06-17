@@ -114,3 +114,11 @@ class MatrixController:
             result.append(matrix_array[i][n])
 
         return result
+
+    @staticmethod
+    def setCell(matrix, row, col, value):
+        array = MatrixController.loadAsArray(matrix)
+        array[row][col] = value
+
+        MatrixController.writeArrayToFile(array, matrix.filename)
+        

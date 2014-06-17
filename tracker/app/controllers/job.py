@@ -1,6 +1,6 @@
 from app import db
-from app.models.job import Job
 from app.models.task import Task
+from app.models.job import Job
 from app.controllers.matrix import MatrixController
 
 
@@ -26,13 +26,17 @@ class JobController:
         return Job.query.get(job_id)
 
     @staticmethod
-    def getTaskMatrixArray(job):
-        matrix = MatrixController.get(job.taskMatrix)
-        return MatrixController.loadAsArray(matrix)
+    def getFirst():
+        return
 
     @staticmethod
-    def getTask(job):
-        taskMatrix = JobController.getTaskMatrixArray(job)
+    def getJobWithFreeTask():
+        return Job.query.filter(Job.free > 0).first()
+
+    @staticmethod
+    def getTask(job, peer_id):
+        matrix = job.taskMatrix
+        taskMatrix = MatrixController.loadAsArray(matrix)
 
         startRow = 0
         startCol = 0
@@ -71,18 +75,26 @@ class JobController:
                 taskMatrix[startRow + i][startCol + j] = STATE_WORKING
                 #changeState(taskMatrix, STATE_WORKING, startRow + i, startCol + j)
 
-        filename = MatrixController.get(job.taskMatrix).filename
-        MatrixController.writeArrayToFile(taskMatrix, filename)
+        MatrixController.writeArrayToFile(taskMatrix, matrix.filename)
+        job.running += nCols * nRows
+        job.free -= nCols * nRows
 
-        return Task(job, startRow, startCol, nRows, nCols)
+        return Task(job, peer, startRow, startCol, nRows, nCols)
 
-    def changeState(matrix, state, row, col):
-         matrix[row][col] = state
+    # def changeState(matrix, state, row, col):
+    #     matrix[row][col] = state
 
-    # def setResult(self, result, row, col):
-    #     self.resultMatrix[row][col] = result
-    #     changeState(STATE_DONE, row, col)
-    #     self.completed += 1
+    def setResult(job, row, col, result):
+        resultMatrix = MatrixController.loadAsArray(job.resultMatrix)
+        taskMatrix = MatrixController.loadAsArray(job.taskMatrix)
+
+        resultMatrix[row][col] = result
+        taskMatrix[row][col] = STATE_DONE
+        job.completed += 1
+        job.running -= 1
+        MatrixController.writeArrayToFile(resultMatrix, job.resultMatrix.filename)
+        MatrixController.writeArrayToFile(taskMatrix, job.taskMatrix.filename)
+
 
     # def isFinished(self):
     #     return self.completed is self.toComplete

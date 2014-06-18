@@ -72,22 +72,11 @@ class JobController:
 
         return TaskController.create(job, peer_id, startRow, startCol, nRows, nCols)
 
+    @staticmethod
     def changeState(matrix, state, row, col):
         matrix[row][col] = state
 
-    def setResult(job, row, col, result):
-        resultMatrix = Matrix.matrices[job.getResultMatrix()]
-        taskMatrix = Matrix.matrices[job.getTaskMatrix()]
 
-        resultMatrix[row][col] = result
-        taskMatrix[row][col] = Constants.STATE_DONE
-        job.completed += 1
-        job.running -= 1
-        if JobController.isFinished(job):
-            MatrixController.writeToFile(Matrix.matrices[job.resultMatrix],
-                "result_matrices/result_job" + job.id, True)
-            # REMOVE JOB + MATRICES
-
-
+    @staticmethod
     def isFinished(job):
-        return job.completed is job.toComplete
+        return job.completed == job.toComplete

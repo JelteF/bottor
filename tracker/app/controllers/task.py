@@ -18,12 +18,6 @@ class TaskController:
     def get(task_id):
         return Task.query.get(task_id)
 
-    def setResult(task, row, col, value):
-        from app.controllers.job import JobController
-        task.completed += 1
-        job = JobController.get(task.job)
-        JobController.setResult(job, row, col, value)
-
     def getRunningTime(task):
         return datetime.now() - task.startTime
 

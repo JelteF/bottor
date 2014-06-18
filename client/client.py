@@ -37,17 +37,17 @@ def main():
     do_every(0.5, send_cpu_ping, _id)
 
     while(1):
-        print('Requesting new task')
+        #print('Requesting new task')
         task = request_task(_id)
-        print('Received task')
-        print('Calculating answer')
+        #print('Received task')
+        #print('Calculating answer')
         answer = calculate_answer(task)
-        print('Calculated answer')
+        #print('Calculated answer')
 
 
-        print('Sending answer')
+        #print('Sending answer')
         send_result(answer)
-        print('Sent answer')
+        #print('Sent answer')
 
 
 

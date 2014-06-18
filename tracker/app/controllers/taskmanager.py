@@ -14,10 +14,3 @@ class TaskManager:
 
         return task
 
-    @staticmethod
-    def setResult(peer_id, task_id, row, col, value):
-        task = TaskController.get(task_id)
-
-        # NOG CHECKEN VOOR AFZENDER PEER_ID
-
-        TaskController.setResult(task, row, col, value)

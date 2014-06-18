@@ -8,7 +8,6 @@ from pprint import pprint
 from app.models.task import Task
 from app.models.job import Job
 
-
 class TaskController:
     def create(job, peer, startRow, startCol, nRows, nCols):
         task = Task(job.id, peer, startRow, startCol, nRows, nCols)

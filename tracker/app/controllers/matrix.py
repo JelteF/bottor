@@ -40,7 +40,6 @@ class MatrixController:
                     raise InvalidMatrixException("Different column lengths found")
             result_matrix.append(columns)
 
-
         matrix = Matrix(filename, rowCnt, colCnt)
         db.session.add(matrix)
         db.session.commit()

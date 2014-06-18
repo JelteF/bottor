@@ -2,25 +2,24 @@ from app.utils.base_model import BaseEntity
 from app import db
 from app.constants import Constants
 from app.controllers.matrix import MatrixController
-from sqlalchemy import Integer, ForeignKey, Boolean, String
 
 
 class Job(db.Model, BaseEntity):
     __tablename__ = 'job'
 
-    matrixA = db.Column(db.Integer, ForeignKey('matrix.id'))
-    matrixB = db.Column(db.Integer, ForeignKey('matrix.id'))
-    filenameA = db.Column(String(256))
-    filenameB = db.Column(String(256))
-    resultCols = db.Column(Integer)
-    resultRows = db.Column(Integer)
-    completed = db.Column(Integer)
-    toComplete = db.Column(Integer)
-    resultMatrix = db.Column(Integer, ForeignKey('matrix.id'))
-    taskMatrix = db.Column(Integer, ForeignKey('matrix.id'))
-    running = db.Column(Integer)
-    free = db.Column(Integer)
-    started = db.Column(Boolean)
+    matrixA = db.Column(db.Integer, db.ForeignKey('matrix.id'))
+    matrixB = db.Column(db.Integer, db.ForeignKey('matrix.id'))
+    filenameA = db.Column(db.String(256))
+    filenameB = db.Column(db.String(256))
+    resultCols = db.Column(db.Integer)
+    resultRows = db.Column(db.Integer)
+    completed = db.Column(db.Integer)
+    toComplete = db.Column(db.Integer)
+    resultMatrix = db.Column(db.Integer, db.ForeignKey('matrix.id'))
+    taskMatrix = db.Column(db.Integer, db.ForeignKey('matrix.id'))
+    running = db.Column(db.Integer)
+    free = db.Column(db.Integer)
+    started = db.Column(db.Boolean)
 
     def __init__(self, matrixA, matrixB):
         self.completed = 0

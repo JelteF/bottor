@@ -12,6 +12,7 @@ app.config['UPLOAD_FOLDER'] = 'static/matrix/'
 app.config['ALLOWED_EXTENSIONS'] = set(['txt'])
 # code for clienthandshake
 app.config['CLIENT_HANDSHAKE'] = 'ILIKETURTLES'
+app.config['active_time'] = 120
 
 login_manager = LoginManager()
 login_manager.init_app(app)

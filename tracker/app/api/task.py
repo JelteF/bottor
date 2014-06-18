@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from app.controllers.taskmanager import TaskManager
 from app.controllers.task import TaskController
 
@@ -27,4 +27,5 @@ def result():
         col = res['col']
         value = res['value']
         TaskManager.setResult(peer_id, task_id, row, col, value)
-   
+
+    return jsonify()

@@ -1,5 +1,6 @@
 from app import db
 from app.models import Peer
+from datetime import datetime
 
 
 class PeerController:
@@ -30,4 +31,14 @@ class PeerController:
     def delete(peer):
         """ Delete peer item """
         db.session.delete(peer)
+        db.session.commit()
+
+    @staticmethod
+    def ping(peer_id, CPU):
+        peer = PeerController.get(peer_id)
+        peer.active = True
+        peer.last_active = datetime.now()
+
+        peer.CPU = CPU
+        db.session.add(peer)
         db.session.commit()

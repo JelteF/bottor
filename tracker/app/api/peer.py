@@ -19,11 +19,12 @@ def create():
     return jsonify(id=peer.id)
 
 
-@peer_api.route('/ping', methods=['POST'])
-def ping():
+@peer_api.route('/ping/<int:peer_id>', methods=['POST'])
+def ping(peer_id):
     """ Get ping from peer"""
-    print(request.json)
-
+    load = int(request.json['load'])
+    if load > 0 and load <= 100 and peer_id:
+        PeerController.ping(peer_id, load)
     return jsonify()
 
 

@@ -28,10 +28,6 @@ class JobController:
         return Job.query.get(job_id)
 
     @staticmethod
-    def getFirst():
-        return
-
-    @staticmethod
     def getJobWithFreeTask():
         return Job.query.filter(Job.free > 0).first()
 
@@ -70,7 +66,7 @@ class JobController:
             for j in range(nCols):
                 JobController.changeState(taskMatrix, Constants.STATE_WORKING, startRow + i, startCol + j)
 
-        #MatrixController.writeArrayToFile(taskMatrix, matrix.filename)
+        MatrixController.writeArrayToFile(taskMatrix, "test")
         job.running += nCols * nRows
         job.free -= nCols * nRows
 
@@ -80,8 +76,8 @@ class JobController:
         matrix[row][col] = state
 
     def setResult(job, row, col, result):
-        resultMatrix = Matrix.matrices[job.resultMatrix]
-        taskMatrix = Matrix.matrices[job.taskMatrix]
+        resultMatrix = Matrix.matrices[job.getResultMatrix()]
+        taskMatrix = Matrix.matrices[job.getTaskMatrix()]
 
         resultMatrix[row][col] = result
         taskMatrix[row][col] = Constants.STATE_DONE
@@ -90,6 +86,7 @@ class JobController:
         if JobController.isFinished(job):
             MatrixController.writeToFile(Matrix.matrices[job.resultMatrix],
                 "result_matrices/result_job" + job.id, True)
+            # REMOVE JOB + MATRICES
 
 
     def isFinished(job):

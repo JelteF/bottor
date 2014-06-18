@@ -13,9 +13,6 @@ class JobController:
 
     @staticmethod
     def create(matrixA, matrixB):
-        if matrixA.nCols is not matrixB.nRows:
-            raise IllegalSizeException("Columns A is not rows B")
-
         job = Job(matrixA, matrixB)
         db.session.add(job)
         db.session.commit()
@@ -40,8 +37,7 @@ class JobController:
 
     @staticmethod
     def getTask(job, peer_id):
-        taskMatrix = Matrix.matrices[job.taskMatrix]
-
+        taskMatrix = Matrix.matrices[job.getTaskMatrix()]
         startRow = 0
         startCol = 0
 

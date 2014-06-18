@@ -43,5 +43,3 @@ app.jinja_env.globals.update(json=json)
 app.jinja_env.globals.update(serialize_sqla=serialize_sqla)
 app.jinja_env.globals.update(len=len)
 
-from app.controllers.jobmanager import JobManager
-job_manager = JobManager()

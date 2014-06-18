@@ -44,12 +44,12 @@ class TrackerTestCase(unittest.TestCase):
         MatrixController.writeToFile(matrix2, "result_matrices/BLABLA")
 
     def testJobController(self):
-        matrixA = MatrixController.createFromFile("sample_matrices/A20")
-        matrixB = MatrixController.createFromFile("sample_matrices/B20")
+        matrixA = "sample_matrices/A20"
+        matrixB = "sample_matrices/B20"
         job = JobController.create(matrixA, matrixB)
         assert job
 
-        array = Matrix.matrices[job.resultMatrix]
+        array = Matrix.matrices[job.getResultMatrix()]
         MatrixController.writeArrayToFile(array, "result_matrices/test3")
 
         JobController.getTask(job, 1)
@@ -59,8 +59,8 @@ class TrackerTestCase(unittest.TestCase):
         assert job2
 
     def testTaskManager(self):
-        matrixA = MatrixController.createFromFile("sample_matrices/A20")
-        matrixB = MatrixController.createFromFile("sample_matrices/B20")
+        matrixA = "sample_matrices/A20"
+        matrixB = "sample_matrices/B20"
         job = JobController.create(matrixA, matrixB)
         assert job
         job2 = JobController.getJobWithFreeTask()
@@ -72,14 +72,10 @@ class TrackerTestCase(unittest.TestCase):
         MatrixController.writeToFile(matrix, "result_matrices/TestManager", True)
 
     def testShit(self):
-        matrixA = MatrixController.createFromFile("sample_matrices/A20")
-        matrixB = MatrixController.createFromFile("sample_matrices/B20")
+        matrixA = "sample_matrices/A20"
+        matrixB = "sample_matrices/B20"
         job = JobController.create(matrixA, matrixB)
-        matrixA = MatrixController.createFromFile("sample_matrices/A20")
-        matrixB = MatrixController.createFromFile("sample_matrices/B20")
         job = JobController.create(matrixA, matrixB)
-        matrixA = MatrixController.createFromFile("sample_matrices/A20")
-        matrixB = MatrixController.createFromFile("sample_matrices/B20")
         job = JobController.create(matrixA, matrixB)
 
 

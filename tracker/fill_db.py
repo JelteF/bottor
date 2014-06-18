@@ -20,14 +20,8 @@ peer1 = Peer('77.249.206.212')
 db.session.add(peer1)
 db.session.commit()
 
-matrixA = MatrixController.createFromFile("sample_matrices/A250")
-matrixB = MatrixController.createFromFile("sample_matrices/B250")
+matrixA = "sample_matrices/A250"
+matrixB = "sample_matrices/B250"
 job = JobController.create(matrixA, matrixB)
-
-matrixA = MatrixController.createFromFile("sample_matrices/A250")
-matrixB = MatrixController.createFromFile("sample_matrices/B250")
 job = JobController.create(matrixA, matrixB)
-
-matrixA = MatrixController.createFromFile("sample_matrices/A250")
-matrixB = MatrixController.createFromFile("sample_matrices/B250")
 job = JobController.create(matrixA, matrixB)

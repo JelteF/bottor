@@ -27,6 +27,7 @@ from app.views.views import views_blueprint
 from app.views.login import login_blueprint
 
 app.register_blueprint(peer_api)
+app.register_blueprint(matrix_api)
 app.register_blueprint(views_blueprint)
 app.register_blueprint(login_blueprint)
 app.register_blueprint(task_api)

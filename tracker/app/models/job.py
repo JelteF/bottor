@@ -3,7 +3,7 @@ from app import db
 from app.constants import Constants
 from app.controllers.matrix import MatrixController
 from sqlalchemy import Integer, ForeignKey, Boolean, String
-from app.models.matrix import Matrix
+
 
 class Job(db.Model, BaseEntity):
     __tablename__ = 'job'
@@ -57,12 +57,10 @@ class Job(db.Model, BaseEntity):
         self.resultRows = matrixB.nCols
         self.toComplete = self.resultCols * self.resultRows
         self.free = self.toComplete
-        resMatrix = MatrixController.createEmptyMatrix(self.resultRows,
-            self.resultCols, "#")
-        taskMatrix = MatrixController.createEmptyMatrix(self.resultRows,
-            self.resultCols, Constants.STATE_NONE)
-        self.matrixA = matrixA.id
-        self.matrixB = matrixB.id
+        resMatrix = MatrixController.createEmptyMatrix(
+            self.resultRows, self.resultCols, "#", 'result')
+        taskMatrix = MatrixController.createEmptyMatrix(
+            self.resultRows, self.resultCols, Constants.STATE_NONE, 'task')
         self.resultMatrix = resMatrix.id
         self.taskMatrix = taskMatrix.id
-        started = True
+        self.started = True

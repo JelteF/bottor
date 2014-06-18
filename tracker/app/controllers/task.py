@@ -20,20 +20,6 @@ class TaskController:
     def get(task_id):
         return Task.query.get(task_id)
 
-    # def getRows(task):
-    #     result = []
-    #     for i in range(nRows):
-    #         result.append(self.job.matrixA.getRow(startRow + i))
-
-    #     return result
-
-    # def getColumns(task):
-    #     result = []
-    #     for i in range(nCols):
-    #         result.append(self.job.matrixB.getColumn(startCol + i))
-
-    #     return result
-
     def setResult(task, row, col, value):
         from app.controllers.job import JobController
         task.completed += 1

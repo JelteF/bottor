@@ -1,11 +1,12 @@
 from app import db
 from app.models.job import Job
+from app.models.matrix import Matrix
 from app.controllers.matrix import MatrixController
 from app.controllers.task import TaskController
+from app.constants import Constants
 
 
 class JobController:
-
     class IllegalSizeException(Exception):
         def __init__(self, arg):
             self.args = arg
@@ -39,19 +40,13 @@ class JobController:
 
     @staticmethod
     def getTask(job, peer_id):
-        matrix = MatrixController.get(job.taskMatrix)
-        taskMatrix = MatrixController.loadAsArray(matrix)
+        taskMatrix = Matrix.matrices[job.taskMatrix]
 
         startRow = 0
         startCol = 0
 
-        TASK_SIZE = 3
-        STATE_WORKING = "1"
-        STATE_NONE = "0"
-        STATE_DONE = "2"
-
         # Find first 0 in taskMatrix
-        while (taskMatrix[startRow][startCol] is not STATE_NONE):
+        while (taskMatrix[startRow][startCol] is not Constants.STATE_NONE):
             startCol += 1
             if startCol >= job.resultRows:
                 startCol = 0
@@ -64,46 +59,42 @@ class JobController:
 
         # Take a few more columns
         while (startCol + nCols < job.resultCols
-                and taskMatrix[startRow + nRows][startCol + nCols] is STATE_NONE
-                and nCols < TASK_SIZE):
+                and taskMatrix[startRow + nRows][startCol + nCols] is Constants.STATE_NONE
+                and nCols < Constants.TASK_SIZE):
             nCols += 1
 
         # Take some rows
         while (startRow + nRows < job.resultRows
-                and taskMatrix[startRow + nRows][startCol + nCols - 1] is STATE_NONE
-                and nRows < TASK_SIZE):
+                and taskMatrix[startRow + nRows][startCol + nCols - 1] is Constants.STATE_NONE
+                and nRows < Constants.TASK_SIZE):
             nRows += 1
 
         # Set on working
         for i in range(nRows):
             for j in range(nCols):
-                taskMatrix[startRow + i][startCol + j] = STATE_WORKING
-                #changeState(taskMatrix, STATE_WORKING, startRow + i, startCol + j)
+                JobController.changeState(taskMatrix, Constants.STATE_WORKING, startRow + i, startCol + j)
 
-        MatrixController.writeArrayToFile(taskMatrix, matrix.filename)
+        #MatrixController.writeArrayToFile(taskMatrix, matrix.filename)
         job.running += nCols * nRows
         job.free -= nCols * nRows
 
         return TaskController.create(job, peer_id, startRow, startCol, nRows, nCols)
 
-    # def changeState(matrix, state, row, col):
-    #     matrix[row][col] = state
+    def changeState(matrix, state, row, col):
+        matrix[row][col] = state
 
     def setResult(job, row, col, result):
-        STATE_DONE = "2"
-
-        rMatrix = MatrixController.get(job.resultMatrix)
-        tMatrix = MatrixController.get(job.taskMatrix)
-        resultMatrix = MatrixController.loadAsArray(rMatrix)
-        taskMatrix = MatrixController.loadAsArray(tMatrix)
+        resultMatrix = Matrix.matrices[job.resultMatrix]
+        taskMatrix = Matrix.matrices[job.taskMatrix]
 
         resultMatrix[row][col] = result
-        taskMatrix[row][col] = STATE_DONE
+        taskMatrix[row][col] = Constants.STATE_DONE
         job.completed += 1
         job.running -= 1
-        MatrixController.writeArrayToFile(resultMatrix, rMatrix.filename)
-        MatrixController.writeArrayToFile(taskMatrix, tMatrix.filename)
+        if JobController.isFinished(job):
+            MatrixController.writeToFile(Matrix.matrices[job.resultMatrix],
+                "result_matrices/result_job" + job.id, True)
 
 
-    # def isFinished(self):
-    #     return self.completed is self.toComplete
+    def isFinished(job):
+        return job.completed is job.toComplete

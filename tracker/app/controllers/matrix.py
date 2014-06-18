@@ -1,42 +1,32 @@
 from app.models.matrix import Matrix
 from app import db
+from app.constants import Constants
 import os.path
+import time
 
-# class InvalidMatrixException(Exception):
-#     status_code = 400
-#     def __init__(self, message, status_code=None, payload=None):
-#         Exception.__init__(self)
-#         self.message = message
-#         if status_code is not None:
-#             self.status_code = status_code
-#         self.payload = payload
 
-#     def to_dict(self):
-#         rv = dict(self.payload or ())
-#         rv['message'] = self.message
-#         return rv
+class InvalidMatrixException(Exception):
+    status_code = 400
+    def __init__(self, message, status_code=None, payload=None):
+        Exception.__init__(self)
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
 
-# class MatrixFileExists(Exception):
-#     status_code = 400
-#     def __init__(self, message, status_code=None, payload=None):
-#         Exception.__init__(self)
-#         self.message = message
-#         if status_code is not None:
-#             self.status_code = status_code
-#         self.payload = payload
+    def to_dict(self):
+        rv = dict(self.payload or ())
+        rv['message'] = self.message
+        return rv
 
-#     def to_dict(self):
-#         rv = dict(self.payload or ())
-#         rv['message'] = self.message
-#         return rv
 
-class MatrixController:
-
+class MatrixController: 
     @staticmethod
-    def create(filename):
+    def createFromFile(filename):
         mFile = open(filename, "r")
         file_contents = mFile.readlines()
-
+        mFile.close()
+        result_matrix = []
 
         rowCnt = len(file_contents)
         colCnt = 0
@@ -47,16 +37,35 @@ class MatrixController:
                 colCnt = len(columns)
             else:
                 if colCnt is not len(columns):
-                    print("WRONG")
+                    raise InvalidMatrixException("Different column lengths found")
+            result_matrix.append(columns)
 
-        mFile.close()
 
         matrix = Matrix(filename, rowCnt, colCnt)
+        db.session.add(matrix)
+        db.session.commit()
+        Matrix.matrices[matrix.id] = result_matrix
 
+        return matrix
+
+    @staticmethod
+    def createFromArray(array):
+        rowCnt = len(array)
+        colCnt = len(array[0])
+
+        matrix = Matrix("", rowCnt, colCnt)
         db.session.add(matrix)
         db.session.commit()
 
+        Matrix.matrices[matrix.id] = array
+
         return matrix
+
+    @staticmethod
+    def createEmptyMatrix(rows, cols, symbol):
+        matrix_array = [[symbol for i in range(cols)] for j in range(rows)]
+
+        return MatrixController.createFromArray(matrix_array)
 
     @staticmethod
     def delete(matrix):
@@ -68,62 +77,45 @@ class MatrixController:
         return Matrix.query.get(matrix_id)
 
     @staticmethod
-    def loadAsArray(matrix):
-        mFile = open(matrix.filename, "r")
-        file_contents = mFile.readlines()
+    def writeToFile(matrix, fname="", overwrite=False):
+        if fname != "":
+            filename = fname
+        elif matrix.filename == "":
+            filename = Constants.WRITEDIR + time.strftime("%Y%m%d-%H%M%S") + ".botmatrix"
+        else:
+            filename = matrix.filename
 
-        result_matrix = []
-
-        for line in file_contents:
-            columns = line.split()
-            result_matrix.append(columns)
-
-        mFile.close()
-        return result_matrix
-
-
-    @staticmethod
-    def writeArrayToFile(matrix, filename, new=False):
         i = 1
-        while new and os.path.isfile(filename):
-            filename = filename + "[" + str(i) + "]"
+        while not overwrite and os.path.isfile(filename):
+            filename = filename + "-" + str(i)
             i += 1
 
-        nRows = len(matrix)
-        nCols = len(matrix[0])
+        MatrixController.writeArrayToFile(Matrix.matrices[matrix.id], filename)
+
+    @staticmethod
+    def writeArrayToFile(array, filename):
+        nRows = len(array)
+        nCols = len(array[0])
         output = ""
 
         for i in range(nRows):
             for j in range(nCols):
                 if j == 0:
-                    output = output + str(matrix[i][j])
+                    output = output + str(array[i][j])
                 else:
-                    output = output + " " + str(matrix[i][j])
+                    output = output + " " + str(array[i][j])
             output = output + "\n"
-            
+
         mFile = open(filename, "w+")
         mFile.write(output)
         mFile.close()
-
-
-    @staticmethod
-    def generateEmptyMatrixArray(rows, cols, symbol):
-        matrix_array = [[symbol for i in range(cols)] for j in range(rows)]
-        return matrix_array
-
-    @staticmethod
-    def createEmptyMatrix(rows, cols, symbol, filename):
-        matrix_array = MatrixController.generateEmptyMatrixArray(rows, cols, symbol)
-        MatrixController.writeArrayToFile(matrix_array, filename, True)
-
-        return MatrixController.create(filename)
 
     @staticmethod
     def getRow(matrix, n):
         if n >= matrix.nRows:
             return 0
 
-        matrix_array = MatrixController.loadAsArray(matrix)
+        matrix_array = Matrix.matrices[matrix.id]
 
         result = [float(i) for i in matrix_array[n]]
 
@@ -136,7 +128,7 @@ class MatrixController:
         if n >= matrix.nCols:
             return 0
 
-        matrix_array = MatrixController.loadAsArray(matrix)
+        matrix_array = Matrix.matrices[matrix.id]
 
         for i in range(matrix.nRows):
             result.append(float(matrix_array[i][n]))
@@ -145,8 +137,5 @@ class MatrixController:
 
     @staticmethod
     def setCell(matrix, row, col, value):
-        array = MatrixController.loadAsArray(matrix)
-        array[row][col] = value
-
-        MatrixController.writeArrayToFile(array, matrix.filename)
+        Matrix.matrices[matrix.id][row][col] = value
         

@@ -11,7 +11,8 @@ task_api = Blueprint('task_api', __name__, url_prefix='/api/task')
 def get(peer_id):
     task = TaskManager.getTask(peer_id)
 
-    return TaskController.getAsJson(task)
+    json = TaskController.getAsJson(task)
+    return json
 
 
 @task_api.route('/send_result', methods=['POST'])

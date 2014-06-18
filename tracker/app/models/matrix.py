@@ -1,6 +1,6 @@
 from app.utils.base_model import BaseEntity
 from app import db
-from sqlalchemy import Integer, ForeignKey
+from sqlalchemy import Integer
 
 class Matrix(db.Model, BaseEntity):
     __tablename__ = 'matrix'
@@ -9,8 +9,7 @@ class Matrix(db.Model, BaseEntity):
     nCols = db.Column(db.Integer)
     filename = db.Column(db.String(256))
 
-    # job = db.relationship('Job', foreign_keys=[Job.matrixA, Job.matrixB,
-    #     Job.resultMatrix, Job.taskMatrix])
+    matrices = {}
 
     def __init__(self, filename, nRows, nCols):
         self.nRows = nRows

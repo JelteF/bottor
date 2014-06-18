@@ -28,40 +28,29 @@ class TrackerTestCase(unittest.TestCase):
 
 
     def testMatrixController(self):
-        matrix = MatrixController.create("sample_matrices/A50")
+        matrix = MatrixController.createFromFile("sample_matrices/A50")
         assert matrix
-        matrix_id = matrix.id
-        matrix2 = MatrixController.get(matrix_id)
+        matrix3 = MatrixController.createFromArray(Matrix.matrices[matrix.id])
+        assert matrix3
+        MatrixController.setCell(matrix3, 0, 0, 0)
+        MatrixController.writeToFile(matrix3, "")
+
+        row = MatrixController.getRow(matrix3, 0)
+        column = MatrixController.getColumn(matrix3, 0)  
+
+        matrix2 = MatrixController.createEmptyMatrix(20, 20, 0)
         assert matrix2
-        array = MatrixController.loadAsArray(matrix2)
-        assert array
-        MatrixController.writeArrayToFile(array, "sample_matrices/test")
-
-
-        row = MatrixController.getRow(matrix, 0)
-        assert(row)
-        #print(row)
-        col = MatrixController.getColumn(matrix, 0)
-        assert col
-        #print(col)
-        MatrixController.delete(matrix)
-        matrix3 = MatrixController.get(matrix_id)
-        assert not matrix3
-
-        array2 = MatrixController.generateEmptyMatrixArray(20, 20, "#")
-        MatrixController.writeArrayToFile(array2, "sample_matrices/test2")
-        matrix4 = MatrixController.create("sample_matrices/test2")
-        assert matrix4
+        MatrixController.writeToFile(matrix2)
+        MatrixController.writeToFile(matrix2, "result_matrices/BLABLA")
 
     def testJobController(self):
-        matrixA = MatrixController.create("sample_matrices/A20")
-        matrixB = MatrixController.create("sample_matrices/B20")
+        matrixA = MatrixController.createFromFile("sample_matrices/A20")
+        matrixB = MatrixController.createFromFile("sample_matrices/B20")
         job = JobController.create(matrixA, matrixB)
         assert job
 
-        resMatrix = MatrixController.get(job.matrixA)
-        array = MatrixController.loadAsArray(resMatrix)
-        MatrixController.writeArrayToFile(array, "sample_matrices/test3")
+        array = Matrix.matrices[job.resultMatrix]
+        MatrixController.writeArrayToFile(array, "result_matrices/test3")
 
         JobController.getTask(job, 1)
         task = JobController.getTask(job, 1)
@@ -70,10 +59,8 @@ class TrackerTestCase(unittest.TestCase):
         assert job2
 
     def testTaskManager(self):
-        matrixA = MatrixController.create("sample_matrices/A20")
-        matrixB = MatrixController.create("sample_matrices/B20")
-        result = Matrix.query.all()
-        print (len(result))
+        matrixA = MatrixController.createFromFile("sample_matrices/A20")
+        matrixB = MatrixController.createFromFile("sample_matrices/B20")
         job = JobController.create(matrixA, matrixB)
         assert job
         job2 = JobController.getJobWithFreeTask()
@@ -81,20 +68,19 @@ class TrackerTestCase(unittest.TestCase):
         task = TaskManager.getTask(1)
         assert task
         TaskController.setResult(task, 5, 19, 69)
+        matrix = MatrixController.get(job.resultMatrix)
+        MatrixController.writeToFile(matrix, "result_matrices/TestManager", True)
 
-    def testTaskAPI(self):
-        matrixA = MatrixController.create("sample_matrices/A20")
-        matrixB = MatrixController.create("sample_matrices/B20")
+    def testShit(self):
+        matrixA = MatrixController.createFromFile("sample_matrices/A20")
+        matrixB = MatrixController.createFromFile("sample_matrices/B20")
         job = JobController.create(matrixA, matrixB)
-        assert job
-        job2 = JobController.getJobWithFreeTask()
-        assert job2
-
-        # with app.test_client() as c, app.app_context():
-        #     resp = c.get('/api/task/request_task/%d' % (1))
-        #     data = json.loads(resp.data)
-        #     self.assert data['id']
-            
+        matrixA = MatrixController.createFromFile("sample_matrices/A20")
+        matrixB = MatrixController.createFromFile("sample_matrices/B20")
+        job = JobController.create(matrixA, matrixB)
+        matrixA = MatrixController.createFromFile("sample_matrices/A20")
+        matrixB = MatrixController.createFromFile("sample_matrices/B20")
+        job = JobController.create(matrixA, matrixB)
 
 
 

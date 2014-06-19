@@ -15,13 +15,15 @@ def get(peer_id):
 
     task = TaskManager.getTask(peer_id)
 
+    print('started json')
     json = TaskController.getAsJson(task)
+    print('finished json')
     return json
 
 
 @task_api.route('/send_result', methods=['POST'])
 def result():
-    peer_id = 0
+    # peer_id = 0
     result = request.json
 
     task_id = result['id']

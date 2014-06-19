@@ -27,8 +27,9 @@ default_task = {
     ]
 }
 
+
 def main():
-    p.cpu_affinity([0])
+    # p.cpu_affinity([0])
     psutil.cpu_percent()
     p.cpu_percent()
 
@@ -37,29 +38,28 @@ def main():
     do_every(0.5, send_cpu_ping, _id)
 
     while(1):
-        #print('Requesting new task')
+        print('Requesting new task')
         task = request_task(_id)
-        #print('Received task')
-        #print('Calculating answer')
+        print('Received task')
+        print('Calculating answer')
         answer = calculate_answer(task)
-        #print('Calculated answer')
+        print('Calculated answer')
 
-
-        #print('Sending answer')
+        print('Sending answer')
         send_result(answer)
-        #print('Sent answer')
+        print('Sent answer')
 
 
-
-"""
-http://stackoverflow.com/a/11488902
-"""
-def do_every (interval, worker_func, *args, **kwargs):
+def do_every(interval, worker_func, *args, **kwargs):
+    """
+    http://stackoverflow.com/a/11488902
+    """
     new_args = [interval, worker_func]
-    temp = new_args.extend(args)
-    threading.Timer(interval, do_every, new_args, kwargs).start();
+    new_args.extend(args)
+    threading.Timer(interval, do_every, new_args, kwargs).start()
 
     worker_func(*args, **kwargs)
+
 
 def handshake():
     data = json.dumps({'secret': 'ILIKETURTLES'})
@@ -73,7 +73,8 @@ def request_task(_id):
 
 def send_result(answer):
     data = json.dumps(answer)
-    requests.post(URL + '/api/task/send_result', data=data, headers=json_header)
+    requests.post(URL + '/api/task/send_result', data=data,
+                  headers=json_header)
 
 
 def send_cpu_ping(_id):
@@ -85,10 +86,14 @@ def send_cpu_ping(_id):
 
 
 def get_load():
+    global have_to_wait
     load = psutil.cpu_percent()
     own_load = p.cpu_percent()
     if load > 60:
         have_to_wait = True
+    else:
+        have_to_wait = False
+
     print(load, own_load)
     return load, own_load
 
@@ -100,17 +105,17 @@ def calculate_answer(task):
         ]
     }
 
-    for row_num, r in task['rows'].items():
-        for col_num, c in task['columns'].items():
-            answer['results'].append({'row': int(row_num),
-                                      'col': int(col_num)})
+    for i, r in enumerate(task['matrixA']):
+        for j, c in enumerate(task['matrixB']):
+            answer['results'].append({'row': i + task['start_row'],
+                                      'col': j + task['start_col']})
             total = 0
 
-            for i in range(len(r)):
+            for h in range(len(r)):
                 if have_to_wait:
                     print('waiting')
                     time.sleep(1)
-                total += r[i] * c[i]
+                total += float(r[h]) * float(c[h])
 
             answer['results'][-1]['value'] = total
 

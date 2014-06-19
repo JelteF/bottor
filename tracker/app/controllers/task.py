@@ -1,10 +1,11 @@
 from datetime import datetime
 from app import db
 from flask import jsonify
-from app.controllers.matrix import MatrixController
-from pprint import pprint
+from app.models.matrix import Matrix
+
+
 from app.models.task import Task
-from app.models.job import Job
+
 
 class TaskController:
     def create(job, peer, startRow, startCol, nRows, nCols):
@@ -24,20 +25,21 @@ class TaskController:
 
     def getAsJson(task):
         from app.controllers.job import JobController
-        json = {}
-        rows = {}
-        cols = {}
 
+        print('a1')
         job = JobController.get(task.job)
-        matrixA = MatrixController.get(job.matrixA)
-        matrixB = MatrixController.get(job.matrixB)
+        print('a2')
 
-        for i in range(task.nRows):
-            row = MatrixController.getRow(matrixA, task.startRow + i)
-            rows[task.startRow + i] = row
+        matrixA = Matrix.matrices[job.matrixA]
+        matrixB = Matrix.matrices[job.matrixB]
 
-        for i in range(task.nCols):
-            col = MatrixController.getColumn(matrixB, task.startCol + i)
-            cols[task.startCol + i] =  col
+        partA = matrixA[task.startRow:task.nRows + task.startRow]
+        partB = matrixB[task.startCol:task.nCols + task.startCol]
 
-        return jsonify(id=task.id, rows=rows, columns=cols)
+        print('a5')
+
+        response = jsonify(id=task.id, start_row=task.startRow,
+                           start_col=task.startCol,
+                           matrixA=partA, matrixB=partB)
+        print('a6')
+        return response

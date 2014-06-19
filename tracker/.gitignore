@@ -2,4 +2,5 @@ venv/
 app/*.db
 result_matrices
 task_matrices
+sample_matrices
 test

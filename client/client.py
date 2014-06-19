@@ -13,18 +13,11 @@ have_to_wait = False
 
 default_task = {
     'id': 2,
-    'rows': [
-        {
-            'number': 1,
-            'sequence': [1, 4, 5]
-        }
-    ],
-    'columns': [
-        {
-            'number': 1,
-            'sequence': [1, 3, 2]
-        }
-    ]
+    'start_row': 1,
+    'start_col': 4,
+
+    'matrixA': [[1, 4, 5]],
+    'matrixB': [[1, 3, 2]],
 }
 
 
@@ -104,9 +97,11 @@ def calculate_answer(task):
         'results': [
         ]
     }
+    m_a = map(lambda x: list(map(float, x)), task['matrixA'])
+    m_b = list(map(lambda x: list(map(float, x)), task['matrixB']))
 
-    for i, r in enumerate(task['matrixA']):
-        for j, c in enumerate(task['matrixB']):
+    for i, r in enumerate(m_a):
+        for j, c in enumerate(m_b):
             answer['results'].append({'row': i + task['start_row'],
                                       'col': j + task['start_col']})
             total = 0
@@ -115,7 +110,7 @@ def calculate_answer(task):
                 if have_to_wait:
                     print('waiting')
                     time.sleep(1)
-                total += float(r[h]) * float(c[h])
+                total += r[h] * c[h]
 
             answer['results'][-1]['value'] = total
 

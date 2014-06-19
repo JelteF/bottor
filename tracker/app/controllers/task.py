@@ -37,7 +37,7 @@ class TaskController:
             rows[task.startRow + i] = row
 
         for i in range(task.nCols):
-            col = MatrixController.getRow(matrixB, task.startCol + i)
+            col = MatrixController.getColumn(matrixB, task.startCol + i)
             cols[task.startCol + i] =  col
 
         return jsonify(id=task.id, rows=rows, columns=cols)

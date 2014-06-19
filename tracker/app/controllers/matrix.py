@@ -68,6 +68,20 @@ class MatrixController:
         return MatrixController.createFromArray(matrix_array, mType)
 
     @staticmethod
+    def loadInMemory(matrix):
+        mFile = open(matrix.filename, "r")
+        file_contents = mFile.readlines()
+        mFile.close()
+        result_matrix = []
+
+        for line in file_contents:
+            columns = line.split()
+            result_matrix.append(columns)
+
+        Matrix.matrices[matrix.id] = result_matrix
+
+
+    @staticmethod
     def delete(matrix):
         db.session.delete(matrix)
         db.session.commit()

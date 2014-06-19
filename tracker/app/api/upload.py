@@ -1,6 +1,6 @@
 """upload.py - API for Upload."""
 import os
-from flask import Blueprint, request, redirect, url_for
+from flask import Blueprint, request, redirect, url_for, jsonify
 from werkzeug import secure_filename
 from app import app
 
@@ -12,16 +12,18 @@ upload_api = Blueprint('upload_api', __name__, url_prefix='/api/upload')
 def upload():
     # Get the name of the uploaded file
     file = request.files['file']
+    print(file.filename)
     # Check if the file is one of the allowed types/extensions
-    if file and allowed_file(file.filename):
-        # Make the filename safe, remove unsupported chars
-        filename = secure_filename(file.filename)
-        # Move the file form the temporal folder to
-        # the upload folder we setup
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        # Redirect the user to the uploaded_file route, which
-        # will basicaly show on the browser the uploaded file
-        return redirect(url_for('uploaded_file', filename=filename))
+    # if file and allowed_file(file.filename):
+    #     # Make the filename safe, remove unsupported chars
+    #     filename = secure_filename(file.filename)
+    #     # Move the file form the temporal folder to
+    #     # the upload folder we setup
+    #     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    #     # Redirect the user to the uploaded_file route, which
+    #     # will basicaly show on the browser the uploaded file
+    #     return redirect(url_for('uploaded_file', filename=filename))
+    return jsonify(niggers="niggers")
 
 
 # For a given file, return whether it's an allowed type or not

@@ -1,6 +1,8 @@
 {% extends "body.htm" %}
 
 {% block includes %}
+    <link href="/static/libraries/jquery/jquery.fileupload.css" rel="stylesheet">
+    <script src="/static/libraries/jquery/jquery.fileupload.js"></script>
     <script src="/static/js/matrix.js"></script>
 {% endblock %}
 
@@ -9,6 +11,11 @@
     <div class='panel panel-default'>
         <div class='panel-heading'>
             <div class='panel-title'>Matrices</div>
+        </div>
+        <div class='panel-body'>
+            <button id='new-btn' class='btn btn-primary'>
+                <strong>+</strong> Add new matrix
+            </button>
         </div>
         <table class="table table-striped custab" id="matrices">
             <thead>
@@ -50,11 +57,16 @@
                 <label for="nCols">Columns</label>
                 <div class="well well-sm" type='text' id="nCols", data-property="nCols"></div>
 
-                <label for="nRows">Columns</label>
+                <label for="nRows">Rows</label>
                 <div class="well well-sm" type='text' id="nRows", data-property="nRows"></div>
-            
-                <label for="shortname">Abbreviation</label>
-                <input class="form_field form-control" type='text' id="shortname", placeholder="Abbreviation for product name", data-property="shortname"/>
+                
+                <label for="filename">File</label>
+                <br/>
+                <span class="btn btn-success fileinput-button" id="filename">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Select matrix</span>
+                    <input id="fileupload" type="file" name="filename">
+                </span>
             </div>
             <button id='save-new' class='btn btn-primary'>Save</button>
         </div>

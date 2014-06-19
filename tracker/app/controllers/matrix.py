@@ -34,6 +34,7 @@ class MatrixController:
 
         for line in file_contents:
             columns = line.split()
+            columns = [float(i) for i in columns]
             if colCnt is 0:
                 colCnt = len(columns)
             elif colCnt != len(columns):
@@ -119,7 +120,7 @@ class MatrixController:
     @staticmethod
     def writeArrayToFile(array, filename):
 
-        output = map(lambda r: ' '.join(r), array)
+        output = map(lambda r: ' '.join(str(x) for x in r), array)
         output = '\n'.join(output)
 
         mFile = open(filename, "w+")
@@ -158,9 +159,11 @@ class MatrixController:
     @staticmethod
     def transpose(matrix):
         transposed = MatrixController.createEmptyMatrix(matrix.nCols, matrix.nRows, "0", 'data')
+        transposed.filename = matrix.filename + "_T"
 
         for i in range(matrix.nRows):
             for j in range(matrix.nCols):
                 Matrix.matrices[transposed.id][j][i] = Matrix.matrices[matrix.id][i][j]
 
-        MatrixController.writeToFile(transposed, matrix.filename + "_T")
+        MatrixController.writeToFile(transposed)
+        return transposed

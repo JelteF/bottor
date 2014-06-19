@@ -25,8 +25,9 @@ class Job(db.Model, BaseEntity):
     def __init__(self, matrixA, matrixB):
         mA = MatrixController.createFromFile(matrixA)
         mB = MatrixController.createFromFile(matrixB)
+        bTransp = MatrixController.transpose(mB)
         self.matrixA = mA.id
-        self.matrixB = mB.id
+        self.matrixB = bTransp.id
         self.completed = 0
         self.running = 0
         self.resultCols = mA.nRows

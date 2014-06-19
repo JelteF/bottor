@@ -1,7 +1,6 @@
 from app import db
 from app.models.job import Job
 from app.models.matrix import Matrix
-from app.controllers.matrix import MatrixController
 from app.controllers.task import TaskController
 from app.constants import Constants
 
@@ -33,57 +32,54 @@ class JobController:
 
     @staticmethod
     def getTask(job, peer_id):
-        print('b1')
         taskMatrix = Matrix.matrices[job.getTaskMatrix()]
         startRow = 0
         startCol = 0
-        print('b2')
 
         # Find first 0 in taskMatrix
-        while (taskMatrix[startRow][startCol] is not Constants.STATE_NONE):
+        while taskMatrix[startRow][startCol] != Constants.STATE_NONE:
             startCol += 1
             if startCol >= job.resultRows:
                 startCol = 0
                 startRow += 1
                 if startRow >= job.resultRows:
-                    return 0 # NO TASKS TO DO, COMPLETED OR EVERYTHING RUNNING
-        print('b3')
+                    # NO TASKS TO DO, COMPLETED OR EVERYTHING RUNNING
+                    return 0
 
         nCols = 0
         nRows = 0
 
         # Take a few more columns
-        while (startCol + nCols < job.resultCols
-                and taskMatrix[startRow + nRows][startCol + nCols] is
-               Constants.STATE_NONE and nCols < Constants.TASK_SIZE):
+        while startCol + nCols < job.resultCols and \
+                taskMatrix[startRow + nRows][startCol + nCols] == \
+                Constants.STATE_NONE and \
+                nCols < Constants.TASK_SIZE:
             nCols += 1
-        print('b4')
 
         # Take some rows
-        while (startRow + nRows < job.resultRows
-                and taskMatrix[startRow + nRows][startCol + nCols - 1] is Constants.STATE_NONE
-                and nRows < Constants.TASK_SIZE):
+        while startRow + nRows < job.resultRows and \
+                taskMatrix[startRow + nRows][startCol + nCols - 1] == \
+                Constants.STATE_NONE and \
+                nRows < Constants.TASK_SIZE:
             nRows += 1
-        print('b5')
 
         # Set on working
         for i in range(nRows):
             for j in range(nCols):
-                JobController.changeState(taskMatrix, Constants.STATE_WORKING, startRow + i, startCol + j)
-        print('b6')
+                JobController.changeState(taskMatrix, Constants.STATE_WORKING,
+                                          startRow + i, startCol + j)
 
-        #MatrixController.writeArrayToFile(taskMatrix, "test")
-        print('b7')
+        # MatrixController.writeArrayToFile(taskMatrix, "test")
+
         job.running += nCols * nRows
         job.free -= nCols * nRows
-        print('b8')
 
-        return TaskController.create(job, peer_id, startRow, startCol, nRows, nCols)
+        return TaskController.create(job, peer_id, startRow, startCol, nRows,
+                                     nCols)
 
     @staticmethod
     def changeState(matrix, state, row, col):
         matrix[row][col] = state
-
 
     @staticmethod
     def isFinished(job):

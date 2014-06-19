@@ -60,6 +60,8 @@ class Job(db.Model, BaseEntity):
             self.resultRows, self.resultCols, "#", 'result')
         taskMatrix = MatrixController.createEmptyMatrix(
             self.resultRows, self.resultCols, Constants.STATE_NONE, 'task')
+        self.matrixA = matrixA.id
+        self.matrixB = matrixB.id
         self.resultMatrix = resMatrix.id
         self.taskMatrix = taskMatrix.id
         self.started = True

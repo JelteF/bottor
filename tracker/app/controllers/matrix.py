@@ -110,10 +110,14 @@ class MatrixController:
         else:
             filename = matrix.filename
 
-        i = 1
-        while not overwrite and os.path.isfile(filename):
-            filename = filename + "-" + str(i)
-            i += 1
+        if not overwrite and os.path.isfile(filename):
+            i = 1
+            tmpFilename = filename + "-" + str(i)
+            while not overwrite and os.path.isfile(tmpFilename):
+                tmpFilename = filename + "-" + str(i)
+                i += 1
+            filename = tmpFilename
+
 
         MatrixController.writeArrayToFile(Matrix.matrices[matrix.id], filename)
 

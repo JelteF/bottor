@@ -4,14 +4,15 @@ from app.controllers.taskmanager import TaskManager
 from app.controllers.task import TaskController
 from app.controllers.job import JobController
 from app.constants import Constants
+from app.controllers.matrix import MatrixController
 
-import json
 
 task_api = Blueprint('task_api', __name__, url_prefix='/api/task')
 
 
 @task_api.route('/request_task/<int:peer_id>', methods=['GET'])
 def get(peer_id):
+
     task = TaskManager.getTask(peer_id)
 
     json = TaskController.getAsJson(task)
@@ -42,7 +43,8 @@ def result():
 
     if JobController.isFinished(job):
         MatrixController.writeToFile(Matrix.matrices[job.resultMatrix],
-            "result_matrices/result_job" + job.id, True)
+                                     "result_matrices/result_job" + job.id,
+                                     True)
         # REMOVE JOB + MATRICES
 
     return jsonify()

@@ -36,10 +36,9 @@ class MatrixController:
             columns = line.split()
             if colCnt is 0:
                 colCnt = len(columns)
-            else:
-                if colCnt is not len(columns):
-                    raise InvalidMatrixException(
-                        "Different column lengthsfound")
+            elif colCnt != len(columns):
+                raise InvalidMatrixException("Different column lengths found")
+
             result_matrix.append(columns)
 
         matrix = Matrix(filename, rowCnt, colCnt, 'data')
@@ -92,8 +91,8 @@ class MatrixController:
         if fname != "":
             filename = fname
         elif matrix.filename == "":
-            filename = (Constants.WRITEDIR + time.strftime("%Y%m%d-%H%M%S") +
-                        ".botmatrix")
+            filename = Constants.WRITEDIR + time.strftime("%Y%m%d-%H%M%S") +\
+                ".botmatrix"
         else:
             filename = matrix.filename
 
@@ -106,17 +105,9 @@ class MatrixController:
 
     @staticmethod
     def writeArrayToFile(array, filename):
-        nRows = len(array)
-        nCols = len(array[0])
-        output = ""
 
-        for i in range(nRows):
-            for j in range(nCols):
-                if j == 0:
-                    output = output + str(array[i][j])
-                else:
-                    output = output + " " + str(array[i][j])
-            output = output + "\n"
+        output = map(lambda r: ' '.join(r), array)
+        output = '\n'.join(output)
 
         mFile = open(filename, "w+")
         mFile.write(output)

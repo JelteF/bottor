@@ -50,6 +50,7 @@ class Job(db.Model, BaseEntity):
         return self.resultMatrix
 
     def initMatrices(self):
+        print('blaaaaaaa iniiiiiittttt')
         matrixA = MatrixController.createFromFile(self.filenameA)
         matrixB = MatrixController.createFromFile(self.filenameB)
         self.resultCols = matrixA.nRows

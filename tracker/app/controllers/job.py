@@ -33,9 +33,11 @@ class JobController:
 
     @staticmethod
     def getTask(job, peer_id):
+        print('b1')
         taskMatrix = Matrix.matrices[job.getTaskMatrix()]
         startRow = 0
         startCol = 0
+        print('b2')
 
         # Find first 0 in taskMatrix
         while (taskMatrix[startRow][startCol] is not Constants.STATE_NONE):
@@ -45,30 +47,36 @@ class JobController:
                 startRow += 1
                 if startRow >= job.resultRows:
                     return 0 # NO TASKS TO DO, COMPLETED OR EVERYTHING RUNNING
+        print('b3')
 
         nCols = 0
         nRows = 0
 
         # Take a few more columns
         while (startCol + nCols < job.resultCols
-                and taskMatrix[startRow + nRows][startCol + nCols] is Constants.STATE_NONE
-                and nCols < Constants.TASK_SIZE):
+                and taskMatrix[startRow + nRows][startCol + nCols] is
+               Constants.STATE_NONE and nCols < Constants.TASK_SIZE):
             nCols += 1
+        print('b4')
 
         # Take some rows
         while (startRow + nRows < job.resultRows
                 and taskMatrix[startRow + nRows][startCol + nCols - 1] is Constants.STATE_NONE
                 and nRows < Constants.TASK_SIZE):
             nRows += 1
+        print('b5')
 
         # Set on working
         for i in range(nRows):
             for j in range(nCols):
                 JobController.changeState(taskMatrix, Constants.STATE_WORKING, startRow + i, startCol + j)
+        print('b6')
 
         #MatrixController.writeArrayToFile(taskMatrix, "test")
+        print('b7')
         job.running += nCols * nRows
         job.free -= nCols * nRows
+        print('b8')
 
         return TaskController.create(job, peer_id, startRow, startCol, nRows, nCols)
 

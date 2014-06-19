@@ -1,0 +1,62 @@
+{% extends "body.htm" %}
+
+{% block includes %}
+    <script src="/static/js/matrix.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div id='new-matrix'></div>
+    <div class='panel panel-default'>
+        <div class='panel-heading'>
+            <div class='panel-title'>Matrices</div>
+        </div>
+        <table class="table table-striped custab" id="matrices">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Rows</th>
+                    <th>Cols</th>
+                    <th>Matrix</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script type="text/template" id="matrix-view-template">
+    <% _.each(matrices, function(matrix) { %>
+        <tr data-id='<%= matrix.get('id') %>'>
+            <td><%= matrix.get('id') %></td>
+            <td><%= matrix.get('nRows') %></td>
+            <td><%= matrix.get('nCols') %></td>
+            <td><%= matrix.get('filename') %></td>
+        </tr>
+    <% }); %>
+    </script>​
+
+    <script type='text/template' id='matrix-new-template'>
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                <div class='panel-title pull-left'>New matrix</div>
+                <button id='cancel-new' class='btn btn-danger pull-right'>
+                    <span class='glyphicon glyphicon-remove'></span> Close
+                </button>
+                <div class='clearfix'></div>
+            </div>
+
+        <div class='panel-body' id='new-matrix-form'>
+            <div class="form-group">
+                <label for="nCols">Columns</label>
+                <div class="well well-sm" type='text' id="nCols", data-property="nCols"></div>
+
+                <label for="nRows">Columns</label>
+                <div class="well well-sm" type='text' id="nRows", data-property="nRows"></div>
+            
+                <label for="shortname">Abbreviation</label>
+                <input class="form_field form-control" type='text' id="shortname", placeholder="Abbreviation for product name", data-property="shortname"/>
+            </div>
+            <button id='save-new' class='btn btn-primary'>Save</button>
+        </div>
+    </script>
+{% endblock %}

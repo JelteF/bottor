@@ -43,7 +43,7 @@
             <td>50:50</td>
             <td>
                 <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="peer.get('CPU')" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="peer.get('CPU')" aria-valuemin="0" aria-valuemax="100" style="width:<%= peer.get('CPU') %>%; color: #000000;">
                         <%= peer.get('CPU') %>%
                     </div>
                 </div>

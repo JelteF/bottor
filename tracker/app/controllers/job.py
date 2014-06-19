@@ -66,7 +66,7 @@ class JobController:
             for j in range(nCols):
                 JobController.changeState(taskMatrix, Constants.STATE_WORKING, startRow + i, startCol + j)
 
-        #MatrixController.writeArrayToFile(taskMatrix, "test")
+        # MatrixController.writeArrayToFile(taskMatrix, "test")
         job.running += nCols * nRows
         job.free -= nCols * nRows
 

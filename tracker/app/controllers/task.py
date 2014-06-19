@@ -3,8 +3,6 @@ from app import db
 from flask import jsonify
 from app.controllers.matrix import MatrixController
 from pprint import pprint
-
-
 from app.models.task import Task
 from app.models.job import Job
 

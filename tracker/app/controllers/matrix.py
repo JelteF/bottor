@@ -77,6 +77,7 @@ class MatrixController:
 
         for line in file_contents:
             columns = line.split()
+            columns = [float(i) for i in columns]
             result_matrix.append(columns)
 
         Matrix.matrices[matrix.id] = result_matrix

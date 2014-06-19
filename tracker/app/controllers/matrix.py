@@ -80,7 +80,6 @@ class MatrixController:
 
         Matrix.matrices[matrix.id] = result_matrix
 
-
     @staticmethod
     def delete(matrix):
         db.session.delete(matrix)
@@ -155,3 +154,13 @@ class MatrixController:
     @staticmethod
     def setCell(matrix, row, col, value):
         Matrix.matrices[matrix.id][row][col] = value
+
+    @staticmethod
+    def transpose(matrix):
+        transposed = MatrixController.createEmptyMatrix(matrix.nCols, matrix.nRows, "0", 'data')
+
+        for i in range(matrix.nRows):
+            for j in range(matrix.nCols):
+                Matrix.matrices[transposed.id][j][i] = Matrix.matrices[matrix.id][i][j]
+
+        MatrixController.writeToFile(transposed, matrix.filename + "_T")

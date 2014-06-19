@@ -6,10 +6,6 @@ from app.constants import Constants
 
 
 class JobController:
-    class IllegalSizeException(Exception):
-        def __init__(self, arg):
-            self.args = arg
-
     @staticmethod
     def create(matrixA, matrixB):
         job = Job(matrixA, matrixB)

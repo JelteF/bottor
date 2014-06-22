@@ -44,8 +44,6 @@ class MatrixController:
         matrix = Matrix(filename, rowCnt, colCnt, 'data')
         db.session.add(matrix)
         db.session.commit()
-        Matrix.matrices[matrix.id] = result_matrix
-
         return matrix
 
     @staticmethod
@@ -57,8 +55,6 @@ class MatrixController:
         db.session.add(matrix)
         db.session.commit()
 
-        Matrix.matrices[matrix.id] = array
-
         return matrix
 
     @staticmethod
@@ -68,7 +64,7 @@ class MatrixController:
         return MatrixController.createFromArray(matrix_array, mType)
 
     @staticmethod
-    def loadInMemory(matrix):
+    def loadInMemory(matrix, job_id):
         mFile = open(matrix.filename, "r")
         file_contents = mFile.readlines()
         mFile.close()
@@ -78,7 +74,7 @@ class MatrixController:
             columns = line.split()
             result_matrix.append(columns)
 
-        Matrix.matrices[matrix.id] = result_matrix
+        Matrix.matrices[job_id][matrix.mType] = result_matrix
 
     @staticmethod
     def delete(matrix):
@@ -103,11 +99,6 @@ class MatrixController:
     def writeToFile(matrix, fname="", overwrite=False):
         if fname != "":
             filename = fname
-        elif matrix.filename == "":
-            filename = Constants.WRITEDIR + time.strftime("%Y%m%d-%H%M%S") +\
-                ".botmatrix"
-        else:
-            filename = matrix.filename
 
         if not overwrite and os.path.isfile(filename):
             i = 1
@@ -117,18 +108,22 @@ class MatrixController:
                 i += 1
             filename = tmpFilename
 
-
-        MatrixController.writeArrayToFile(Matrix.matrices[matrix.id], filename)
-
-    @staticmethod
-    def writeArrayToFile(array, filename):
-
-        output = map(lambda r: ' '.join(str(x) for x in r), array)
+        output = map(lambda r: ' '.join(str(x) for x in r), matrix)
         output = '\n'.join(output)
 
         mFile = open(filename, "w+")
         mFile.write(output)
         mFile.close()
+
+    # @staticmethod
+    # def writeArrayToFile(array, filename):
+
+    #     output = map(lambda r: ' '.join(str(x) for x in r), array)
+    #     output = '\n'.join(output)
+
+    #     mFile = open(filename, "w+")
+    #     mFile.write(output)
+    #     mFile.close()
 
     @staticmethod
     def getRow(matrix, n):
@@ -157,16 +152,13 @@ class MatrixController:
 
     @staticmethod
     def setCell(matrix, row, col, value):
-        Matrix.matrices[matrix.id][row][col] = value
+        matrix[row][col] = value
 
     @staticmethod
     def transpose(matrix):
-        transposed = MatrixController.createEmptyMatrix(matrix.nCols, matrix.nRows, "0", 'data')
-        transposed.filename = matrix.filename + "_T"
+        matrix_T = [[]]
+        for i in range(len(matrix[0])):
+            for j in range(len(matrix)):
+                matrix_T[j][i] = matrix[i][j]
 
-        for i in range(matrix.nRows):
-            for j in range(matrix.nCols):
-                Matrix.matrices[transposed.id][j][i] = Matrix.matrices[matrix.id][i][j]
-
-        MatrixController.writeToFile(transposed)
-        return transposed
+        return matrix_T

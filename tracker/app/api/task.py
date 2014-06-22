@@ -32,8 +32,8 @@ def result():
     job = JobController.get(task.job)
     job.completed += len(result['results'])
     job.running -= len(result['results'])
-    resultMatrix = Matrix.matrices[job.resultMatrix]
-    taskMatrix = Matrix.matrices[job.taskMatrix]
+    resultMatrix = Matrix.matrices[job.id]['result']
+    taskMatrix = Matrix.matrices[job.id]['task']
 
     for res in result['results']:
         row = res['row']
@@ -44,7 +44,7 @@ def result():
         taskMatrix[row][col] = Constants.STATE_DONE
 
     if JobController.isFinished(job):
-        MatrixController.writeToFile(Matrix.matrices[job.resultMatrix],
+        MatrixController.writeToFile(Matrix.matrices[job.id]['result'],
                                      "result_matrices/result_job" + job.id,
                                      True)
         # REMOVE JOB + MATRICES

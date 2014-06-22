@@ -11,6 +11,7 @@ class JobController:
         job = Job(matrixA, matrixB)
         db.session.add(job)
         db.session.commit()
+        job.loadMatrices()
         return job
 
     @staticmethod
@@ -28,7 +29,7 @@ class JobController:
 
     @staticmethod
     def getTask(job, peer_id):
-        taskMatrix = Matrix.matrices[job.getTaskMatrix()]
+        taskMatrix = Matrix.matrices[job.id]['task']
         startRow = 0
         startCol = 0
 

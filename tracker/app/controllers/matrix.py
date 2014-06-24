@@ -137,9 +137,7 @@ class MatrixController:
 
         matrix_array = Matrix.matrices[matrix.id]
 
-        result = [float(i) for i in matrix_array[n]]
-
-        return result
+        return matrix_array[n]
 
     @staticmethod
     def getColumn(matrix, n):
@@ -151,7 +149,7 @@ class MatrixController:
         matrix_array = Matrix.matrices[matrix.id]
 
         for i in range(matrix.nRows):
-            result.append(float(matrix_array[i][n]))
+            result.append(matrix_array[i][n])
 
         return result
 
@@ -161,7 +159,8 @@ class MatrixController:
 
     @staticmethod
     def transpose(matrix):
-        transposed = MatrixController.createEmptyMatrix(matrix.nCols, matrix.nRows, "0", 'data')
+        transposed = MatrixController.createEmptyMatrix(matrix.nCols, 
+            matrix.nRows, "0", 'data')
         transposed.filename = matrix.filename + "_T"
 
         for i in range(matrix.nRows):

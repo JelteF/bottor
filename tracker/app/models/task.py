@@ -11,7 +11,7 @@ class Task(db.Model, BaseEntity):
     startCol = db.Column(db.Integer)
     nRows = db.Column(db.Integer)
     nCols = db.Column(db.Integer)
-    startTime = db.Column(db.DateTime, default=datetime.now)
+    startTime = db.Column(db.DateTime)
     toComplete = db.Column(db.Integer)
     completed = db.Column(db.Integer)
     peer = db.Column(db.Integer, db.ForeignKey('peer.id'))

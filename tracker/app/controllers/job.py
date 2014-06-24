@@ -62,7 +62,7 @@ class JobController:
         # Set on working
         for i in range(nRows):
             for j in range(nCols):
-                JobController.changeState(taskMatrix, Constants.STATE_WORKING,
+                JobController.changeState(job, Constants.STATE_WORKING,
                                           startRow + i, startCol + j)
 
         job.running += nCols * nRows
@@ -72,9 +72,15 @@ class JobController:
                                      nCols)
 
     @staticmethod
-    def changeState(matrix, state, row, col):
-        matrix[row][col] = state
+    def changeState(job, state, row, col):
+        taskMatrix = Matrix.matrices[job.getTaskMatrix()]
+        taskMatrix[row][col] = state
 
+    @staticmethod
+    def getState(job, row, col):
+        taskMatrix = Matrix.matrices[job.getTaskMatrix()]
+        return taskMatrix[row][col]
+    
     @staticmethod
     def isFinished(job):
         return job.completed == job.toComplete

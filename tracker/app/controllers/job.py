@@ -1,7 +1,6 @@
 from app import db
-from app.models.job import Job
-from app.models.matrix import Matrix
-from app.controllers.task import TaskController
+from app.models import Job
+from app.models import Matrix
 from app.constants import Constants
 
 
@@ -11,6 +10,7 @@ class JobController:
         job = Job(matrixA, matrixB)
         db.session.add(job)
         db.session.commit()
+        job.loadMatrices(matrixA, matrixB)
         return job
 
     @staticmethod
@@ -28,7 +28,15 @@ class JobController:
 
     @staticmethod
     def getTask(job, peer_id):
-        taskMatrix = Matrix.matrices[job.getTaskMatrix()]
+        from app.controllers import TaskController
+        from app.controllers import MatrixController
+        try:
+            taskMatrix = Matrix.matrices[job.id]['task']
+        except KeyError:
+            job.loadMatrices(MatrixController.get(job.matrixA),
+                             MatrixController.get(job.matrixB))
+            taskMatrix = Matrix.matrices[job.id]['task']
+
         startRow = 0
         startCol = 0
 

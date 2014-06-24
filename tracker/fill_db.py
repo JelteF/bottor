@@ -9,7 +9,6 @@ from app import db
 from app.models import *
 from app.controllers.job import JobController
 from app.controllers.matrix import MatrixController
-from werkzeug.security import generate_password_hash
 
 #Main account
 admin = Account('root', 'n3tb0t')
@@ -22,6 +21,10 @@ db.session.commit()
 
 matrixA = "sample_matrices/A1000"
 matrixB = "sample_matrices/B1000"
-job = JobController.create(matrixA, matrixB)
-job = JobController.create(matrixA, matrixB)
-job = JobController.create(matrixA, matrixB)
+
+mA = MatrixController.createFromFile(matrixA)
+mB = MatrixController.createFromFile(matrixB)
+
+job = JobController.create(mA, mB)
+job = JobController.create(mA, mB)
+job = JobController.create(mA, mB)

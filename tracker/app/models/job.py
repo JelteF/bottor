@@ -1,6 +1,7 @@
 from app.utils.base_model import BaseEntity
 from app import db
-from app.controllers.matrix import MatrixController
+from app.models import Matrix
+from app.constants import Constants
 
 
 class Job(db.Model, BaseEntity):
@@ -20,13 +21,12 @@ class Job(db.Model, BaseEntity):
     matrixA = db.Column(db.Integer, db.ForeignKey('matrix.id'))
     matrixB = db.Column(db.Integer, db.ForeignKey('matrix.id'))
 
-    taskMatrix = db.Column(db.Integer, db.ForeignKey('matrix.id'))
     resultMatrix = db.Column(db.Integer, db.ForeignKey('matrix.id'))
 
     def __init__(self, matrixA, matrixB):
+        from app.controllers import MatrixController
         self.resultCols = matrixA.nRows
         self.resultRows = matrixB.nCols
-        bTransp = MatrixController.transpose(matrixB)
 
         self.toComplete = self.resultCols * self.resultRows
         self.free = self.toComplete
@@ -36,7 +36,7 @@ class Job(db.Model, BaseEntity):
         self.completed = 0
 
         self.matrixA = matrixA.id
-        self.matrixB = bTransp.id
+        self.matrixB = matrixB.id
 
         resMatrix = MatrixController.createEmptyMatrix(
             self.resultRows, self.resultCols, "#", 'result')
@@ -54,8 +54,27 @@ class Job(db.Model, BaseEntity):
     def getResultMatrix(self):
         return self.resultMatrix
 
-    def loadMatrices(self):
+    def loadMatrices(self, matrixA, matrixB):
+        from app.controllers import MatrixController
         print(self.id)
+
+        Matrix.matrices[self.id] = {}
+
+        MatrixController.loadInMemory(
+            MatrixController.loadFromFile(matrixA.filename), self.id, 'dataA')
+
+        bTransp = MatrixController.transpose(MatrixController.loadFromFile(
+            matrixB.filename))
+        MatrixController.loadInMemory(bTransp, self.id, 'dataB')
+
+        task = [[Constants.STATE_NONE for i in range(self.resultCols)] for j in range(self.resultRows)]
+        MatrixController.loadInMemory(task, self.id, 'task')
+
+        result = [['#' for i in range(self.resultCols)] for j in range(self.resultRows)]
+        MatrixController.loadInMemory(result, self.id, 'result')
+
+        print(Matrix.matrices[self.id].keys())
+
         # taskMatrix = MatrixController.createEmptyMatrix(
         #     self.resultRows, self.resultCols, Constants.STATE_NONE, 'task')
         # self.taskMatrix = taskMatrix.id

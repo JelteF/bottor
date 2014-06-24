@@ -1,4 +1,4 @@
-from app.models.matrix import Matrix
+from app.models import Matrix
 from app import db
 from app.constants import Constants
 import os.path
@@ -64,8 +64,12 @@ class MatrixController:
         return MatrixController.createFromArray(matrix_array, mType)
 
     @staticmethod
-    def loadInMemory(matrix, job_id):
-        mFile = open(matrix.filename, "r")
+    def loadInMemory(matrix, job_id, matrix_type):
+        Matrix.matrices[job_id][matrix_type] = matrix
+
+    @staticmethod
+    def loadFromFile(filename):
+        mFile = open(filename, "r")
         file_contents = mFile.readlines()
         mFile.close()
         result_matrix = []
@@ -74,7 +78,7 @@ class MatrixController:
             columns = line.split()
             result_matrix.append(columns)
 
-        Matrix.matrices[job_id][matrix.mType] = result_matrix
+        return result_matrix
 
     @staticmethod
     def delete(matrix):
@@ -156,9 +160,9 @@ class MatrixController:
 
     @staticmethod
     def transpose(matrix):
-        matrix_T = [[]]
-        for i in range(len(matrix[0])):
-            for j in range(len(matrix)):
-                matrix_T[j][i] = matrix[i][j]
+        matrix_T = [[0 for i in range(len(matrix[0]))] for j in range(len(matrix))]
+        for new_row, old_row in zip(matrix_T, matrix):
+            for j, cell in enumerate(old_row):
+                new_row[j] = cell
 
         return matrix_T

@@ -1,10 +1,10 @@
 from flask import Blueprint, request, jsonify
 from app.models.matrix import Matrix
 from app.controllers.taskmanager import TaskManager
-from app.controllers.task import TaskController
-from app.controllers.job import JobController
+from app.controllers import TaskController
+from app.controllers import JobController
 from app.constants import Constants
-from app.controllers.matrix import MatrixController
+from app.controllers import MatrixController
 
 
 task_api = Blueprint('task_api', __name__, url_prefix='/api/task')

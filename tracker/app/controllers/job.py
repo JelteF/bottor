@@ -81,14 +81,14 @@ class JobController:
 
     @staticmethod
     def changeState(job, state, row, col):
-        taskMatrix = Matrix.matrices[job.getTaskMatrix()]
+        taskMatrix = job.getTaskMatrix()
         taskMatrix[row][col] = state
 
     @staticmethod
     def getState(job, row, col):
-        taskMatrix = Matrix.matrices[job.getTaskMatrix()]
+        taskMatrix = job.getTaskMatrix()
         return taskMatrix[row][col]
-    
+
     @staticmethod
     def isFinished(job):
         return job.completed == job.toComplete

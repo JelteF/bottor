@@ -43,16 +43,16 @@ class Job(db.Model, BaseEntity):
         self.resultMatrix = resMatrix.id
 
     def getMatrixA(self):
-        return self.matrixA
+        return Matrix.matrices[self.id]['dataA']
 
     def getMatrixB(self):
-        return self.matrixB
+        return Matrix.matrices[self.id]['dataB']
 
     def getTaskMatrix(self):
-        return self.taskMatrix
+        return Matrix.matrices[self.id]['task']
 
     def getResultMatrix(self):
-        return self.resultMatrix
+        return Matrix.matrices[self.id]['result']
 
     def loadMatrices(self, matrixA, matrixB):
         from app.controllers import MatrixController

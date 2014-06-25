@@ -14,6 +14,8 @@ task_api = Blueprint('task_api', __name__, url_prefix='/api/task')
 def get(peer_id):
 
     task = TaskManager.getTask(peer_id)
+    if task == 0:
+        return jsonify(), 500
 
     print('started json')
     json = TaskController.getAsJson(task)
@@ -32,8 +34,8 @@ def result():
     job = JobController.get(task.job)
     job.completed += len(result['results'])
     job.running -= len(result['results'])
-    resultMatrix = Matrix.matrices[job.resultMatrix]
-    taskMatrix = Matrix.matrices[job.taskMatrix]
+    resultMatrix = Matrix.matrices[job.getResultMatrix()]
+    taskMatrix = Matrix.matrices[job.getTaskMatrix()]
 
     for res in result['results']:
         row = res['row']
@@ -44,7 +46,7 @@ def result():
         taskMatrix[row][col] = Constants.STATE_DONE
 
     if JobController.isFinished(job):
-        MatrixController.writeToFile(Matrix.matrices[job.resultMatrix],
+        MatrixController.writeToFile(Matrix.matrices[job.getResultMatrix()],
                                      "result_matrices/result_job" + job.id,
                                      True)
         # REMOVE JOB + MATRICES

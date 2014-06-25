@@ -33,6 +33,10 @@ def main():
     while(1):
         print('Requesting new task')
         task = request_task(_id)
+
+        if task == 0:
+            time.sleep(5)
+            continue
         print('Received task')
         print('Calculating answer')
         answer = calculate_answer(task)
@@ -61,7 +65,12 @@ def handshake():
 
 
 def request_task(_id):
-    return requests.get(URL + '/api/task/request_task/' + str(_id)).json()
+    request = requests.get(URL + '/api/task/request_task/' + str(_id))
+
+    if request.status_code != 200:
+        return 0
+
+    return request.json()
 
 
 def send_result(answer):

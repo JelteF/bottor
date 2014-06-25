@@ -1,6 +1,7 @@
+from app import app
 from app.models import Matrix
 from app import db
-import os.path
+import os
 
 
 class InvalidMatrixException(Exception):
@@ -22,7 +23,8 @@ class InvalidMatrixException(Exception):
 class MatrixController:
     @staticmethod
     def createFromFile(filename):
-        mFile = open(filename, "r")
+        fileloc = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        mFile = open(fileloc, "r")
         file_contents = mFile.readlines()
         mFile.close()
         result_matrix = []
@@ -67,7 +69,8 @@ class MatrixController:
 
     @staticmethod
     def loadFromFile(filename):
-        mFile = open(filename, "r")
+        fileloc = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        mFile = open(fileloc, "r")
         file_contents = mFile.readlines()
         mFile.close()
         result_matrix = []

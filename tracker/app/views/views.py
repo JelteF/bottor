@@ -1,5 +1,5 @@
 """views.py - View for administration."""
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, redirect
 from app.views import login
 from app.controllers import PeerController, MatrixController
 
@@ -45,3 +45,10 @@ def multiply():
         'matrices': MatrixController.get_all_data(),
 
     })
+
+
+@views_blueprint.route('/uploads/<path:filename>')
+@login.login_redirect
+def uploaded_file(filename):
+    print(filename)
+    return redirect('static/matrix/' + filename, code=301)

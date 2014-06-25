@@ -42,10 +42,11 @@ var MatrixNewView = Backbone.View.extend({
         var template = _.template($('#matrix-new-template').html(), {});
         this.$el.html(template);
         $('input#fileupload').fileupload({
-            url: "/api/upload",
+            url: '/api/upload',
             dataType: 'json',
             done: function (e, data) {
-                console.log(data);
+                console.log(data.result.file);
+                $('#filename').val(data.result.file);
             },
         }); 
     },

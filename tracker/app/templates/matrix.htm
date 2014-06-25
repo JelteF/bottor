@@ -37,7 +37,11 @@
             <td><%= matrix.get('id') %></td>
             <td><%= matrix.get('nRows') %></td>
             <td><%= matrix.get('nCols') %></td>
-            <td><%= matrix.get('filename') %></td>
+            <td>
+                <a href="/uploads/<%= matrix.get('filename') %>">
+                    <%= matrix.get('filename') %>
+                </a>
+            </td>
         </tr>
     <% }); %>
     </script>
@@ -53,21 +57,16 @@
             </div>
 
         <div class='panel-body' id='new-matrix-form'>
-            <div class="form-group">
-                <label for="nCols">Columns</label>
-                <div class="well well-sm" type='text' id="nCols", data-property="nCols"></div>
-
-                <label for="nRows">Rows</label>
-                <div class="well well-sm" type='text' id="nRows", data-property="nRows"></div>
-
-                <label for="filename">File</label>
-                <br/>
-                <span class="btn btn-success fileinput-button" id="filename">
+            <div class="form-group clearfix">
+                <label for="file">File</label>
+                <input class="form-control" id="filename" data-property="filename" readonly>
+                <span class="btn btn-success fileinput-button" id="file">
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>Select matrix</span>
-                    <input id="fileupload" type="file" name="filename">
+                    <input id="fileupload" type="file" name="file">
                 </span>
             </div>
+            <br/>
             <button id='save-new' class='btn btn-primary'>Save</button>
         </div>
     </script>

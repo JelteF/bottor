@@ -7,8 +7,6 @@ the system.
 """
 from app import db
 from app.models import *
-from app.controllers.job import JobController
-from app.controllers.matrix import MatrixController
 
 #Main account
 admin = Account('root', 'n3tb0t')
@@ -18,13 +16,3 @@ db.session.commit()
 peer1 = Peer('77.249.206.212')
 db.session.add(peer1)
 db.session.commit()
-
-matrixA = "sample_matrices/A1000"
-matrixB = "sample_matrices/B1000"
-
-mA = MatrixController.createFromFile(matrixA)
-mB = MatrixController.createFromFile(matrixB)
-
-job = JobController.create(mA, mB)
-job = JobController.create(mA, mB)
-job = JobController.create(mA, mB)

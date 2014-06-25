@@ -13,7 +13,7 @@ def create():
     """ Create new matrix """
     matrix_dict = request.json
 
-    matrix = MatrixController.create(matrix_dict)
+    matrix = MatrixController.createFromFile(matrix_dict['filename'])
 
     return jsonify(id=matrix.id)
 

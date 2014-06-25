@@ -16,7 +16,15 @@ models.Matrix = Backbone.Model.extend({
         nRows: null,
         nCols: null,
     },
-})
+});
+
+models.Job = Backbone.Model.extend({
+    urlRoot: '/api/job',
+    defaults: {
+        matrixA: null,
+        matrixB: null,
+    }
+});
 
 /* Collections. */
 var collections = {};

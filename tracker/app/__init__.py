@@ -31,6 +31,7 @@ app.register_blueprint(matrix_api)
 app.register_blueprint(views_blueprint)
 app.register_blueprint(login_blueprint)
 app.register_blueprint(task_api)
+app.register_blueprint(job_api)
 
 
 @app.errorhandler(404)

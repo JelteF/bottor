@@ -1,10 +1,10 @@
 from flask import Blueprint, request, jsonify
 from app.models.matrix import Matrix
 from app.controllers.taskmanager import TaskManager
-from app.controllers.task import TaskController
-from app.controllers.job import JobController
+from app.controllers import TaskController
+from app.controllers import JobController
 from app.constants import Constants
-from app.controllers.matrix import MatrixController
+from app.controllers import MatrixController
 
 
 task_api = Blueprint('task_api', __name__, url_prefix='/api/task')
@@ -34,8 +34,8 @@ def result():
     job = JobController.get(task.job)
     job.completed += len(result['results'])
     job.running -= len(result['results'])
-    resultMatrix = Matrix.matrices[job.getResultMatrix()]
-    taskMatrix = Matrix.matrices[job.getTaskMatrix()]
+    resultMatrix = Matrix.matrices[job.id]['result']
+    taskMatrix = Matrix.matrices[job.id]['task']
 
     for res in result['results']:
         row = res['row']
@@ -46,7 +46,7 @@ def result():
         taskMatrix[row][col] = Constants.STATE_DONE
 
     if JobController.isFinished(job):
-        MatrixController.writeToFile(Matrix.matrices[job.getResultMatrix()],
+        MatrixController.writeToFile(Matrix.matrices[job.id]['result'],
                                      "result_matrices/result_job" + job.id,
                                      True)
         # REMOVE JOB + MATRICES

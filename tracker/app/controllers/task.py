@@ -2,10 +2,8 @@ from datetime import datetime, timedelta
 from app import db
 from flask import jsonify
 from app.constants import Constants
-from app.models.matrix import Matrix
-
-
-from app.models.task import Task
+from app.models import Matrix
+from app.models import Task
 
 
 class TaskController:
@@ -58,8 +56,8 @@ class TaskController:
 
         job = JobController.get(task.job)
 
-        matrixA = Matrix.matrices[job.matrixA]
-        matrixB = Matrix.matrices[job.matrixB]
+        matrixA = Matrix.matrices[job.id]['dataA']
+        matrixB = Matrix.matrices[job.id]['dataB']
 
         partA = matrixA[task.startRow:task.nRows + task.startRow]
         partB = matrixB[task.startCol:task.nCols + task.startCol]

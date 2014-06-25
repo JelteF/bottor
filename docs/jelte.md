@@ -15,7 +15,9 @@ elke rij met elke kolom en stuurte de resultaten daarvan terug.
 - Libraries uitzoeken voor gebruik in de client
 Om vanuit Python HTTP requests te sturen naar een server is de requests library
 het simpelst om te gebruiken. Het is ook ruimschoots uitgebreid genoeg voor de
-features die wij nodig hebben.
+features die wij nodig hebben. Voor het meten van het CPU gebruik is psutil de
+meest gebruikelijk optie. Angezien we ook geen ingewikkelde metingen hoeven te
+doen voor de CPU load heeft deze library genoeg functionaliteit.
 
 ### Week 3
 - Vermenigvuldigen van rijen en kolommen in de in de vorm van de API
@@ -27,12 +29,24 @@ gebaseerd op de vernieuwde API.
 
 - Basis protocol naar server implementeren voor matrices
 Het implementeren van het protocol was niet al te ingewikkeld. De requests
-library voor Python is vrij simpel.
+library voor Python is vrij simpel te gebruiken. In combinatie met de standaard
+json module was het geen enkel probleem om json data te versturen naar de
+server.
 
-- Client cpu load bepalen
-- Client cpu load sturen naar de server
+- Client cpu load bepalen en sturen naar de server
+De CPU load moet gemeten worden in een apparte thread van het main programma,
+aangezien er anders niet gemeten kan worden met vastgesteld interval. Een
+interval is nodig zodat de server op de hoogte gesteld kan worden van de staat
+van de client.
 
 - Verminderen van de request overhead op de server
+Nadat de communicatie tussen de client en server werkte bleek dat de elke
+request toch een behoorlijke overhead had. Dit hebben we op een aantal verschillende
+manieren verminderd. Een van de eerste dingen om de relatieve overhead te
+verminderen was meer rijen en kolommen sturen per request. De overhead per
+request gaat in principe lineair omhoog (r + k) en het werk dat de client kan
+uitvoeren gaat kwadratisch omhoog (r * k)
+
 
 ### Week 4
 - Verslag schrijven

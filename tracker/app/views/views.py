@@ -29,6 +29,15 @@ def status():
     })
 
 
+@views_blueprint.route('/job/', methods=['GET'])
+@login.login_redirect
+def job():
+    return render_template('job.htm', data={
+        'job': MatrixController.get_all_data(),
+
+    })
+
+
 @views_blueprint.route('/multiply/', methods=['GET'])
 @login.login_redirect
 def multiply():

@@ -63,3 +63,10 @@ Omdat ik heb webprogrammeren veel werk vond vroeg ik aan Jelte of hij een
 pagina aan kon maken die nieuwe jobs kan maken. Jelte die geenszins in
 tijdsgebrek zat ging hier mee akkoord en leverde diezelfde dag nog resultaat.
 Een pagina waarop je nieuwe jobs kon maken.
+
+Omdat er nog geen pagina was om de aangemaakte jobs te zien ging ik vervolgens
+daarmee aan de slag. Jelte wees me er enigszins terecht op dat ik de pagina
+niet volledig dynamisch hoefde te implementeren dus maakte ik geen gebruik van
+de database interactie library backbone. Die ik voor de matrix pagina wel
+gebruikte, als ik verder ga met dit project ga ik dit alsnog wel doen. Dit
+omdat ik de manier van implementatie erg aestetisch.

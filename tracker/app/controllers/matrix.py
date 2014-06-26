@@ -160,8 +160,8 @@ class MatrixController:
     @staticmethod
     def transpose(matrix):
         matrix_T = [[0 for i in range(len(matrix[0]))] for j in range(len(matrix))]
-        for new_row, old_row in zip(matrix_T, matrix):
+        for i, old_row in enumerate(matrix):
             for j, cell in enumerate(old_row):
-                new_row[j] = cell
+                matrix_T[j][i] = cell
 
         return matrix_T

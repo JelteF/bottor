@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.models.matrix import Matrix
+from app import db
 from app.controllers.taskmanager import TaskManager
 from app.controllers import TaskController
 from app.controllers import JobController
@@ -45,10 +46,14 @@ def result():
         resultMatrix[row][col] = value
         taskMatrix[row][col] = Constants.STATE_DONE
 
+    print ("Job " + str(job.id) + ": " + str(job.completed) + "/" + str(job.toComplete) + " completed")
+
     if JobController.isFinished(job):
+        filename = "result_matrices/result_job_" + str(job.id)
+        print ("Job " + str(job.id) + " completed. Writing result to file " + filename)
         MatrixController.writeToFile(Matrix.matrices[job.id]['result'],
-                                     "result_matrices/result_job" + job.id,
-                                     True)
+                                     filename, True)
         # REMOVE JOB + MATRICES
+    db.session.commit()
 
     return jsonify()

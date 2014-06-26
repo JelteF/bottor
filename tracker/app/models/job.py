@@ -32,7 +32,6 @@ class Job(db.Model, BaseEntity):
         self.free = self.toComplete
 
         self.running = 0
-        self.running = 0
         self.completed = 0
 
         self.matrixA = matrixA.id

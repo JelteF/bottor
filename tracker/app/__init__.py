@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config.from_object('config')
 
 # This is the path to the upload directory
-app.config['UPLOAD_FOLDER'] = 'static/matrix/'
+app.config['UPLOAD_FOLDER'] = 'app/static/matrix/'
 # These are the extension that we are accepting to be uploaded
 app.config['ALLOWED_EXTENSIONS'] = set(['txt'])
 # code for clienthandshake
@@ -31,6 +31,7 @@ app.register_blueprint(matrix_api)
 app.register_blueprint(views_blueprint)
 app.register_blueprint(login_blueprint)
 app.register_blueprint(task_api)
+app.register_blueprint(job_api)
 
 
 @app.errorhandler(404)
@@ -43,4 +44,3 @@ import json
 app.jinja_env.globals.update(json=json)
 app.jinja_env.globals.update(serialize_sqla=serialize_sqla)
 app.jinja_env.globals.update(len=len)
-

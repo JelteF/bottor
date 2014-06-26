@@ -125,3 +125,16 @@ function getObjects(obj, key, val) {
     }
     return objects;
 }
+
+function JSON_post(data, url, options) {
+    var defaults = {
+        'type': 'POST',
+        'data': JSON.stringify(data),
+        'dataType': 'json',
+        'contentType': "application/json; charset=utf-8",
+        'url': url
+    };
+    options = _.merge(defaults, options);
+    return $.ajax(options);
+}
+

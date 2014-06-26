@@ -7,8 +7,6 @@ the system.
 """
 from app import db
 from app.models import *
-from app.controllers.job import JobController
-from app.controllers.matrix import MatrixController
 
 #Main account
 admin = Account('root', 'n3tb0t')

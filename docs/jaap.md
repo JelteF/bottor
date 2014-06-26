@@ -87,3 +87,4 @@ van een A x B vermenigvuldiging de uitkomst van de A x B^Transpose
 vermenigvuldiging. Verder werd de job nooit op voltooid gezet, en werd de
 resultmatrix zodoende nooit weggeschreven. De dinsdag en de woensdag ben ik
 bezig geweest met deze codingfoutjes op te sporen en te repareren.
+Donderdag heb ik de poster afgemaakt en het verslag geschreven.

@@ -32,6 +32,8 @@ def serialize_sqla(data):
 
 
 def row2dict(row):
+    if(not row):
+        return None
     d = {}
     for column in row.__table__.columns:
         d[column.name] = getattr(row, column.name)

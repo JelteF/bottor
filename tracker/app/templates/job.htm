@@ -1,6 +1,7 @@
 {% extends "body.htm" %}
 
 {% block includes %}
+    <link href="/static/css/job_style.css" rel="stylesheet">
     <script src="/static/js/multiply.js"></script>
 {% endblock %}
 
@@ -17,10 +18,35 @@
                         <th>ID</th>
                         <th>Matrix A</th>
                         <th>Matrix B</th>
-                        <th>State</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for job in data.jobs %}
+                        <tr>
+                            <td>
+                                <div class="jobid"
+                                    {% if job.isFinished == True %}
+                                        style='background: #5cb85c'
+                                    {% else %}
+                                        style='background: #d9534f'
+                                    {% endif %}
+                                >
+
+                                    <span> {{job.id}} </span>
+                                <div>
+                            </td>
+                            <td>
+                                <a href="/uploads/{{job.matrixA.filename}}">
+                                    {{job.matrixA.filename}}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/uploads/{{job.matrixB.filename}}">
+                                    {{job.matrixB.filename}}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

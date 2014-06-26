@@ -5,6 +5,7 @@ models.Peer = Backbone.Model.extend({
     defaults: {
         id: null,
         location: '',
+        job: '',
     },
 });
 

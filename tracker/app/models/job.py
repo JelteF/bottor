@@ -18,10 +18,15 @@ class Job(db.Model, BaseEntity):
     completed = db.Column(db.Integer)
 
     # matrices
-    matrixA = db.Column(db.Integer, db.ForeignKey('matrix.id'))
-    matrixB = db.Column(db.Integer, db.ForeignKey('matrix.id'))
+    matrixA_id = db.Column(db.Integer, db.ForeignKey('matrix.id'))
+    matrixB_id = db.Column(db.Integer, db.ForeignKey('matrix.id'))
+
+    matrixA = db.relationship('Matrix', foreign_keys=[matrixA_id])
+    matrixB = db.relationship('Matrix', foreign_keys=[matrixB_id])
 
     resultMatrix = db.Column(db.Integer, db.ForeignKey('matrix.id'))
+
+    tasks = db.relationship('Task', backref='job')
 
     def __init__(self, matrixA, matrixB):
         from app.controllers import MatrixController
@@ -34,8 +39,11 @@ class Job(db.Model, BaseEntity):
         self.running = 0
         self.completed = 0
 
-        self.matrixA = matrixA.id
-        self.matrixB = matrixB.id
+        self.matrixA = matrixA
+        self.matrixB = matrixB
+
+        self.matrixA_id = matrixA.id
+        self.matrixB_id = matrixB.id
 
         resMatrix = MatrixController.createEmptyMatrix(
             self.resultRows, self.resultCols, "#", 'result')
@@ -52,6 +60,9 @@ class Job(db.Model, BaseEntity):
 
     def getResultMatrix(self):
         return Matrix.matrices[self.id]['result']
+
+    def isFinished(self):
+        return self.completed == self.toComplete
 
     def loadMatrices(self, matrixA, matrixB):
         from app.controllers import MatrixController

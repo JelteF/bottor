@@ -4,3 +4,4 @@ result_matrices
 task_matrices
 sample_matrices
 test
+app/static/matrix/*.txt

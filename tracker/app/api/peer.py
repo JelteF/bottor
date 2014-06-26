@@ -2,7 +2,7 @@
 from flask import Blueprint, jsonify, request
 from app import app
 from app.controllers import PeerController
-from app.utils import serialize_sqla
+from app.utils import serialize_sqla, row2dict
 from app.views import login
 
 peer_api = Blueprint('peer_api', __name__, url_prefix='/api/peer')
@@ -62,4 +62,12 @@ def get_all():
     if not peers:
         return jsonify(error='No peers were found'), 500
 
-    return jsonify(peers=serialize_sqla(peers))
+    ser_peers = []
+    for peer in peers:
+        ser_peer = row2dict(peer)
+        ser_peer['job'] = None
+        if(peer.task):
+            ser_peer['job'] = row2dict(peer.task.job)
+        ser_peers.append(ser_peer)
+
+    return jsonify(peers=ser_peers)

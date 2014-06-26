@@ -48,7 +48,7 @@ def result():
 
     print ("Job " + str(job.id) + ": " + str(job.completed) + "/" + str(job.toComplete) + " completed")
 
-    if JobController.isFinished(job):
+    if job.isFinished():
         filename = "result_matrices/result_job_" + str(job.id)
         print ("Job " + str(job.id) + " completed. Writing result to file " + filename)
         MatrixController.writeToFile(Matrix.matrices[job.id]['result'],

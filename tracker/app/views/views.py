@@ -1,7 +1,7 @@
 """views.py - View for administration."""
 from flask import render_template, Blueprint, redirect
 from app.views import login
-from app.controllers import PeerController, MatrixController
+from app.controllers import PeerController, MatrixController, JobController
 
 views_blueprint = Blueprint('views', __name__, url_prefix='')
 
@@ -32,10 +32,11 @@ def status():
 @views_blueprint.route('/job/', methods=['GET'])
 @login.login_redirect
 def job():
-    return render_template('job.htm', data={
-        'job': MatrixController.get_all_data(),
-
-    })
+    jobs = JobController.get_all()
+    for job in jobs:
+        print(job.matrixA)
+        print(job.matrixB)
+    return render_template('job.htm', data={'jobs': jobs, })
 
 
 @views_blueprint.route('/multiply/', methods=['GET'])

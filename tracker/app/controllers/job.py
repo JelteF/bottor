@@ -23,6 +23,11 @@ class JobController:
         return Job.query.get(job_id)
 
     @staticmethod
+    def get_all():
+        """Get all jobs."""
+        return Job.query.all()
+
+    @staticmethod
     def getJobWithFreeTask():
         return Job.query.filter(Job.free > 0).first()
 
@@ -88,7 +93,3 @@ class JobController:
     def getState(job, row, col):
         taskMatrix = job.getTaskMatrix()
         return taskMatrix[row][col]
-
-    @staticmethod
-    def isFinished(job):
-        return job.completed == job.toComplete

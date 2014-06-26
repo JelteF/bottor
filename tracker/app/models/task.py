@@ -6,7 +6,7 @@ from datetime import datetime
 class Task(db.Model, BaseEntity):
     __tablename__ = 'task'
 
-    job = db.Column(db.Integer, db.ForeignKey('job.id'))
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id'))
     startRow = db.Column(db.Integer)
     startCol = db.Column(db.Integer)
     nRows = db.Column(db.Integer)
@@ -14,10 +14,11 @@ class Task(db.Model, BaseEntity):
     startTime = db.Column(db.DateTime)
     toComplete = db.Column(db.Integer)
     completed = db.Column(db.Integer)
-    peer = db.Column(db.Integer, db.ForeignKey('peer.id'))
+    peer_id = db.Column(db.Integer, db.ForeignKey('peer.id'))
+    peer = db.relationship('Peer', backref=db.backref('task', uselist=False))
 
-    def __init__(self, job, peer, startRow, startCol, nRows, nCols):
-        self.job = job
+    def __init__(self, job_id, peer_id, startRow, startCol, nRows, nCols):
+        self.job_id = job_id
         self.startRow = startRow
         self.startCol = startCol
         self.nRows = nRows
@@ -25,4 +26,4 @@ class Task(db.Model, BaseEntity):
         self.startTime = datetime.now()
         self.toComplete = nRows * nCols
         self.completed = 0
-        self.peer = peer
+        self.peer_id = peer_id

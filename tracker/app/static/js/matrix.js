@@ -55,6 +55,9 @@ var MatrixNewView = Backbone.View.extend({
         'click button#save-new': 'save'
     },
     cancel: function(event) {
+        this.undelegateEvents();
+        this.$el.removeData().unbind();
+
         this.$el.empty();
         $('#new-btn').parents('.panel-body').show();
         $('#new-btn').show()

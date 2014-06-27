@@ -18,6 +18,7 @@
                         <th>ID</th>
                         <th>Matrix A</th>
                         <th>Matrix B</th>
+                        <th>Running time</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +45,13 @@
                                 <a href="/uploads/{{job.matrixB.filename}}">
                                     {{job.matrixB.filename}}
                                 </a>
+                            </td>
+                            <td>
+                                {% if job.isFinished() == True %}
+                                    {{job.end - job.start}}
+                                {% else %}
+                                    No finish yet
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

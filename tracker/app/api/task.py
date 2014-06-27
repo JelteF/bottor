@@ -6,6 +6,7 @@ from app.controllers import TaskController
 from app.controllers import JobController
 from app.constants import Constants
 from app.controllers import MatrixController
+from datetime import datetime
 
 
 task_api = Blueprint('task_api', __name__, url_prefix='/api/task')
@@ -53,6 +54,7 @@ def result():
         print ("Job " + str(job.id) + " completed. Writing result to file " + filename)
         MatrixController.writeToFile(Matrix.matrices[job.id]['result'],
                                      filename, True)
+        job.end = datetime.now()
         # REMOVE JOB + MATRICES
     db.session.commit()
 

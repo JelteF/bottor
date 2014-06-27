@@ -2,6 +2,7 @@ from app import db
 from app.models import Job
 from app.models import Matrix
 from app.constants import Constants
+from datetime import datetime
 
 
 class JobController:
@@ -41,6 +42,10 @@ class JobController:
             job.loadMatrices(job.matrixA, job.matrixB)
             taskMatrix = Matrix.matrices[job.id]['task']
 
+        if(not job.started):
+            job.started = True
+            job.start = datetime.now()
+        db.session.commit()
         startRow = 0
         startCol = 0
 

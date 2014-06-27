@@ -23,7 +23,7 @@ class TaskController:
     def cancelTask(task_id):
         from app.controllers.job import JobController
         task = TaskController.get(task_id)
-        job = JobController.get(task.job)
+        job = task.job
 
         cancelCnt = 0
 

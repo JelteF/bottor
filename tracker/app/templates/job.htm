@@ -25,7 +25,7 @@
                         <tr>
                             <td>
                                 <div class="jobid"
-                                    {% if job.isFinished == True %}
+                                    {% if job.isFinished() == True %}
                                         style='background: #5cb85c'
                                     {% else %}
                                         style='background: #d9534f'

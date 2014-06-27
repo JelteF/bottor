@@ -38,8 +38,7 @@ class JobController:
         try:
             taskMatrix = Matrix.matrices[job.id]['task']
         except KeyError:
-            job.loadMatrices(MatrixController.get(job.matrixA),
-                             MatrixController.get(job.matrixB))
+            job.loadMatrices(job.matrixA, job.matrixB)
             taskMatrix = Matrix.matrices[job.id]['task']
 
         startRow = 0

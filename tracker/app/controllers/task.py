@@ -54,7 +54,7 @@ class TaskController:
     def getAsJson(task):
         from app.controllers.job import JobController
 
-        job = JobController.get(task.job)
+        job = task.job
 
         matrixA = Matrix.matrices[job.id]['dataA']
         matrixB = Matrix.matrices[job.id]['dataB']

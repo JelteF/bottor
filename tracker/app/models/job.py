@@ -28,6 +28,9 @@ class Job(db.Model, BaseEntity):
 
     tasks = db.relationship('Task', backref='job')
 
+    start = db.Column(db.DateTime)
+    end = db.Column(db.DateTime)
+
     def __init__(self, matrixA, matrixB):
         from app.controllers import MatrixController
         self.resultCols = matrixA.nRows

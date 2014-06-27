@@ -32,7 +32,7 @@ def result():
     task_id = result['id']
     task = TaskController.get(task_id)
     task.completed += len(result['results'])
-    job = JobController.get(task.job)
+    job = task.job
     job.completed += len(result['results'])
     job.running -= len(result['results'])
     resultMatrix = Matrix.matrices[job.id]['result']

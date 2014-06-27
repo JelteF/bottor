@@ -7,7 +7,7 @@ class TaskManager:
 
     @staticmethod
     def getTask(peer_id):
-        TaskManager.cancelLongRunningTasks()
+        # TaskManager.cancelLongRunningTasks()
         job = JobController.getJobWithFreeTask()
 
         if not job:

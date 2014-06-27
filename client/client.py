@@ -6,7 +6,7 @@ import psutil
 import threading
 import time
 
-URL = 'http://localhost:5000'
+URL = 'http://netbot.jeltef.nl'
 json_header = {'content-type': 'application/json'}
 p = psutil.Process()
 have_to_wait = False

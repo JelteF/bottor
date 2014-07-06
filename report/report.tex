@@ -1,6 +1,8 @@
 \documentclass[11pt]{article}
 
+\usepackage{amsmath}
 \usepackage{float}
+\newcommand{\BigO}[1]{\ensuremath{\operatorname{O}\bigl(#1\bigr)}}
 
 \title{\textbf{Gedistribueerde Matrixvermenigvuldiging}\\
                 Project Netcentric Computing}
@@ -73,18 +75,18 @@ tabel 1).
     zal het meeste resultaat ontvangen worden.}
 \end{table}
 
-Behalve het verdelen van taken houdt de server de adminstratie bij. De server houdt bij hoeveel
+Behalve het verdelen van taken houdt de server de administratie bij. De server houdt bij hoeveel
 cellen van de resultaatmatrix C er al berekend zijn, hoeveel cellen er momenteel door clients
 uitgerekend worden en hoeveel cellen er nog toegewezen moeten worden. Wanneer een client een
-task aanvraagt en de eerste job in de queue heeft geen niet-toegewezen cellen meer vrij, dan
+taak aanvraagt en de eerste job in de queue heeft geen niet-toegewezen cellen meer vrij, dan
 wordt automatisch een taak toegewezen uit de volgende job indien beschikbaar. Als er geen taak
 meer toegewezen kan worden krijgt de client hier bericht van en gaat de client in idle-stand.
 In idle-stand probeert de client elke 5 seconden opnieuw een taak op te vragen, net zo lang tot
 er weer een taak beschikbaar is.\\
-Elke keer als een client een task aanvraagt bij de server controleert de server eerst of er geen
-tasks zijn die verlopen zijn: dit zijn toegewezen tasks waarvan de client niet binnen een vooraf
+Elke keer als een client een taak aanvraagt bij de server controleert de server eerst of er geen
+taken zijn die verlopen zijn: dit zijn toegewezen taken waarvan de client niet binnen een vooraf
 gestelde tijd (zie Constants.py) reageert en waarvan aangenomen kan worden dat dit resultaat niet
-meer in redelijke tijd terugkomt. Deze task wordt dan geannuleerd en kan opnieuw aan een andere
+meer in redelijke tijd terugkomt. Deze taak wordt dan geannuleerd en kan opnieuw aan een andere
 client worden toegewezen. Zo wordt voorkomen dat er onnodig lang gewacht wordt op clients die
 het resultaat niet terug (kunnen) sturen.\\
 De server houdt behalve de jobstatus ook de CPU-load van de clients bij. Clients sturen elke
@@ -102,7 +104,7 @@ E\'{e}n van de eerste aanpassingen die we maakten om de relatieve overhead te ve
 het versturen van een groter aantal rijen en kolommen per taskrequest. In de testfase stond de
 TASK\_SIZE (het aantal rijen en kolommen dat per taak toegewezen wordt) laag (op 3 tot 5) om het
 overzicht te houden. Bij het versturen van 3 rijen en 3 kolommen komt er een resultaat van 9 cellen
-terug (3\times3), dat is 1.5 cel per rij/kolom. De overhead per request gaat theoretisch lineair omhoog
+terug ($3\times3$), dat is 1.5 cel per rij/kolom. De overhead per request gaat theoretisch lineair omhoog
 ($r + k$), maar het werkt dat de client met die data kan uitvoeren gaat kwadratisch omhoog ($r * k$).
 Dit betekent dat bij het versturen van het dubbele aantal rijen en kolommen ($3 + 3$ of $6 + 6$), het
 aantal resultaatcellen dat terugkomt omhoog gaat van 9 ($3 * 3$) naar 36 ($6 * 6$). Dat is al een
@@ -117,7 +119,7 @@ eindapplicatie worden de matrices in geheugen geladen als arrays, zodat de bronm
 eenmalig ingelezen hoeven te worden, en de resultaatmatrix slechts eenmaal weggeschreven hoeft
 te worden (bij voltooiing van de job). De precieze tijd dat hiermee gewonnen wordt is sterk
 afhankelijk van de grootte van de matrix, dus precieze cijfers zijn moeilijk te geven, maar bij
-matrixgroottes vanaf 250\times250 is de winst al duidelijk merkbaar.
+matrixgroottes vanaf $250\times250$ is de winst al duidelijk merkbaar.
 
 De laatste grote verbetering zat in de JSON serialisatie. Deze overhead is op twee manieren
 aangepast. Allereerst is de structuur van de API aangepast. In plaats van het sturen van rijen
@@ -135,28 +137,47 @@ point getallen niet nodig, dus hier hebben we de bronmatrices uiteindelijk gewoo
 laten staan.
 
 Dit alles heeft ervoor gezorgd dat, natuurlijk afhankelijk van de server en de
-client. Er ongeveer 2 seconden nodig is per request aan overhead en zo'n 12 aan
-werk voor de client. Als er meerdere clients verbonden zijn kan die overhead
-flink groeien doordat de requests dan tegelijk aan kunnen komen bij de server en
-een client dan ook moet wachten op de overhead van de request voor de eerdere
-client(s).
+client, er ongeveer 3 seconden nodig is per request aan overhead en zo'n 12 aan
+werk voor de client bij een matrix van $1000\times1000$. Als er meerdere clients
+verbonden zijn kan die overhead flink groeien doordat de requests dan tegelijk
+aan kunnen komen bij de server en een client dan ook moet wachten op de overhead
+van de request voor de eerdere client(s). Dit overhead probleem laat al snel van
+zich merken bij het gebruik. Met 2 en 3 clients is er duidelijk een speedup
+aanwezig, maar vanaf 4 verschillende clients wordt de overhead al de bottleneck.
+Dit probleem kan ook niet verminderd worden door grotere matrices te nemen.
+Omdat je dan meer data per rij en kolom moet versturen wordt de verhouding
+tussen de hoeveelheid te versturen data en het aantal berekingen dat met de data
+gedaan kan worden minder juist ongunstiger.
 
 
 \section{Conclusie}
-Het disbriueren van lastige reken taken met een protocol lijkend op het protocol
+Het distribueren van lastige reken taken met een protocol lijkend op het protocol
 wat wij gebruikt hebben is goed mogelijk. Het is een goede manier om te zorgen
 dat het zwaar werk verdeeld kan worden over normale computers. Wat alleen erg
 belangrijk is om rekening mee te houden, is de verhouding rekentijd en grote van
-de dataset. Als de clients allemaal heel lang moeten wachten tot ze de data
-binnen hebben waarmee ze moeten gaan rekenen is er al een boel tijd verspild.
-Zeker aangezien de wachttijd per client dan alleen maar hoger word omdat de
-server de load dan niet aan kan. Bij het vermenigvuldigen van matrices is die
-data distributie overhead erg groot.
+de dataset. De load van het versturen van de data kan voor de server grote
+problemen opleveren. Dit wordt alleen maar erger als er meer clients mee helpen
+en kan dit ervoor zorgen dat de speedup stagneert. Bij het vermenigvuldigen van
+matrices is die data distributie overhead erg groot en stagneert de speedup
+daarom snel.
+
 
 
 \section{Discussie}
+Er zijn twee oplossingen die verder onderzocht zouden kunnen worden om de
+overhead op de server te verminderen. Allereerst zou men een moeilijker probleem
+kunnen proberen op te lossen. Aangezien naive matrixvermenigvuldiging een
+complexiteit heeft van $\BigO{n^3}$ zou bijvoorbeeld een probleem gezocht
+kunnen worden met een complexiteit van $\BigO{2^n}$. Dan kan de client veel meer
+werk met dezelfde hoeveelheid data.
 
-
+Als andere oplossing zou gekeken kunnen worden naar het gedistribueerd maken van
+de distributie van de data. Een mogelijke manier hiervoor zou kunnen zijn dat de
+matrices opgesplitst worden in losse files en dat die daarna doormiddel van
+peer-to-peer technologie (torrents) verspreid worden tussen de clients. Op die
+manier hoeft de server in principe maar een paar keer de files te versturen. En
+kan het daarna in theorie de verspreiding hiervan overgenomen worden door de
+clients.
 
 
 \begin{thebibliography}{9}

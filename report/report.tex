@@ -153,31 +153,32 @@ gedaan kan worden minder juist ongunstiger.
 \section{Conclusie}
 Het distribueren van lastige reken taken met een protocol lijkend op het protocol
 wat wij gebruikt hebben is goed mogelijk. Het is een goede manier om te zorgen
-dat het zwaar werk verdeeld kan worden over normale computers. Wat alleen erg
-belangrijk is om rekening mee te houden, is de verhouding rekentijd en grote van
-de dataset. De load van het versturen van de data kan voor de server grote
-problemen opleveren. Dit wordt alleen maar erger als er meer clients mee helpen
-en kan dit ervoor zorgen dat de speedup stagneert. Bij het vermenigvuldigen van
-matrices is die data distributie overhead erg groot en stagneert de speedup
-daarom snel.
+dat zwaar werk verdeeld kan worden over normale computers. Wat alleen erg
+belangrijk is om rekening mee te houden, is de verhouding rekentijd tegenover
+grote van de dataset. De load van het versturen van de data kan voor de server
+grote problemen opleveren. Dit wordt alleen maar erger als er meer clients
+meehelpen en kan dit ervoor zorgen dat de speedup stagneert. Bij het
+vermenigvuldigen van matrices is die data distributie overhead erg groot en
+stagneert de speedup daarom snel. Met deze reden zijn we er op uit gekomen dat
+het gedistribueerd vermenigvuldigen van matrices op deze manier niet bruikbaar
+is.
 
 
 
 \section{Discussie}
 Er zijn twee oplossingen die verder onderzocht zouden kunnen worden om de
 overhead op de server te verminderen. Allereerst zou men een moeilijker probleem
-kunnen proberen op te lossen. Aangezien naive matrixvermenigvuldiging een
+kunnen proberen op te lossen. Aangezien na\"ive matrixvermenigvuldiging een
 complexiteit heeft van $\BigO{n^3}$ zou bijvoorbeeld een probleem gezocht
 kunnen worden met een complexiteit van $\BigO{2^n}$. Dan kan de client veel meer
-werk met dezelfde hoeveelheid data.
+werk met dezelfde hoeveelheid data doen.
 
 Als andere oplossing zou gekeken kunnen worden naar het gedistribueerd maken van
 de distributie van de data. Een mogelijke manier hiervoor zou kunnen zijn dat de
 matrices opgesplitst worden in losse files en dat die daarna doormiddel van
 peer-to-peer technologie (torrents) verspreid worden tussen de clients. Op die
 manier hoeft de server in principe maar een paar keer de files te versturen. En
-kan het daarna in theorie de verspreiding hiervan overgenomen worden door de
-clients.
+kan in theorie de verspreiding hiervan dan overgenomen worden door de clients.
 
 
 \begin{thebibliography}{9}

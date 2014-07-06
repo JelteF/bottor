@@ -33,8 +33,9 @@ en wel om de volgende reden:
 Onze eerste intentie was om een soort van botnet op te zetten. Na enig brainstormwerk werd dit
 deze gedistribueerde matrixvermenigvuldiging, maar een raakvlak met een botnet is er nog steeds.
 Een botnet distribueert software dat op een willekeurig groot aantal computer uitgevoerd wordt,
-wat wij ook gaan doen. Een botnet communiceerde voorheen namelijk vooral via het HTTP protocol
-(tegenwoordig wordt er meer van het IRC protocol gebruik gemaakt) \cite{rajab06}. De reden
+wat wij ook gaan doen. Een botnet communiceerde voorheen namelijk vooral via het
+HTTP protocol,
+tegenwoordig wordt er ook van het IRC protocol gebruik gemaakt \cite{rajab06}. De reden
 hiervoor is het feit dat HTTP en IRC nauwelijks geblokkeerd worden door de firewall, waardoor
 de communicatie vrije doorgang heeft. Door ook het HTTP protocol te gebruiken hebben we geen
 last van firewalls en kunnen we een HTTP API opzetten, waar Flask uitermate geschikt voor is.\\
@@ -67,7 +68,7 @@ tabel 1).
     2              & x & 4                 & = & 8               \\
     3              & x & 3                 & = & 9               \\ \hline
     \end{tabular}
-    \caption{Overzicht aantal cellen in resultaatmatrix C bij het versturen van een totaal van 6 
+    \caption{Overzicht aantal cellen in resultaatmatrix C bij het versturen van een totaal van 6
     rijen en kolommen. Wanneer het aantal rijen van A en het kolommen van B gelijk gehouden wordt
     zal het meeste resultaat ontvangen worden.}
 \end{table}
@@ -93,7 +94,7 @@ De server houdt behalve de jobstatus ook de CPU-load van de clients bij. Clients
 Gedurende de implementatie liepen we tegen verbeterpunten aan die we on-the-fly verbeterd hebben.
 In het begin leek het nut van de distributie van onze matrixvermenigvuldiging in het water te
 vallen, omdat de taskrequests plus bijbehorende communicatie tussen client en server zodanig
-veel overhead veroorzaakten dan er van de totale tijd weinig effectieve rekentijd was aan de 
+veel overhead veroorzaakten dan er van de totale tijd weinig effectieve rekentijd was aan de
 clientside: de client stond tussen de 80\% en 90\% van de tijd te wachten op reactie van de
 server bij een taskrequest of een verzending van een resultaat.\\
 \\
@@ -101,7 +102,7 @@ E\'{e}n van de eerste aanpassingen die we maakten om de relatieve overhead te ve
 het versturen van een groter aantal rijen en kolommen per taskrequest. In de testfase stond de
 TASK\_SIZE (het aantal rijen en kolommen dat per taak toegewezen wordt) laag (op 3 tot 5) om het
 overzicht te houden. Bij het versturen van 3 rijen en 3 kolommen komt er een resultaat van 9 cellen
-terug (3x3), dat is 1.5 cel per rij/kolom. De overhead per request gaat theoretisch lineair omhoog
+terug (3\times3), dat is 1.5 cel per rij/kolom. De overhead per request gaat theoretisch lineair omhoog
 ($r + k$), maar het werkt dat de client met die data kan uitvoeren gaat kwadratisch omhoog ($r * k$).
 Dit betekent dat bij het versturen van het dubbele aantal rijen en kolommen ($3 + 3$ of $6 + 6$), het
 aantal resultaatcellen dat terugkomt omhoog gaat van 9 ($3 * 3$) naar 36 ($6 * 6$). Dat is al een
@@ -116,7 +117,7 @@ eindapplicatie worden de matrices in geheugen geladen als arrays, zodat de bronm
 eenmalig ingelezen hoeven te worden, en de resultaatmatrix slechts eenmaal weggeschreven hoeft
 te worden (bij voltooiing van de job). De precieze tijd dat hiermee gewonnen wordt is sterk
 afhankelijk van de grootte van de matrix, dus precieze cijfers zijn moeilijk te geven, maar bij
-matrixgroottes vanaf 250x250 is de winst al duidelijk merkbaar.
+matrixgroottes vanaf 250\times250 is de winst al duidelijk merkbaar.
 
 De laatste grote verbetering zat in de JSON serialisatie. Deze overhead is op twee manieren
 aangepast. Allereerst is de structuur van de API aangepast. In plaats van het sturen van rijen
@@ -131,14 +132,32 @@ naar de client worden ze omgezet in JSON-formaat. JSON verstuurd de net omgezett
 echter als strings en converteert de floating point getallen weer. Aan de client-side worden de
 strings vervolgens weer omgezet naar floating point getallen. Aan de server-side zijn floating
 point getallen niet nodig, dus hier hebben we de bronmatrices uiteindelijk gewoon als strings
-laten staan.\\
-Deze verbeteringen samen hebben ervoor gezorgd dat een taskrequest naar de server in een oogwenk
-gedaan is en de effectieve rekentijd van de client boven de 95\% zit. Dit laatste is natuurlijk
-erg afhankelijk van de afstand en verbinding tussen client en server dus kunnen niet als harde
-cijfers beschouwd worden, maar we kunnen met aan zekerheid grenzende waarschijnlijkheid stellen
-dat de overall performance fors verbeterd is.
+laten staan.
+
+Dit alles heeft ervoor gezorgd dat, natuurlijk afhankelijk van de server en de
+client. Er ongeveer 2 seconden nodig is per request aan overhead en zo'n 12 aan
+werk voor de client. Als er meerdere clients verbonden zijn kan die overhead
+flink groeien doordat de requests dan tegelijk aan kunnen komen bij de server en
+een client dan ook moet wachten op de overhead van de request voor de eerdere
+client(s).
+
 
 \section{Conclusie}
+Het disbriueren van lastige reken taken met een protocol lijkend op het protocol
+wat wij gebruikt hebben is goed mogelijk. Het is een goede manier om te zorgen
+dat het zwaar werk verdeeld kan worden over normale computers. Wat alleen erg
+belangrijk is om rekening mee te houden, is de verhouding rekentijd en grote van
+de dataset. Als de clients allemaal heel lang moeten wachten tot ze de data
+binnen hebben waarmee ze moeten gaan rekenen is er al een boel tijd verspild.
+Zeker aangezien de wachttijd per client dan alleen maar hoger word omdat de
+server de load dan niet aan kan. Bij het vermenigvuldigen van matrices is die
+data distributie overhead erg groot.
+
+
+\section{Discussie}
+
+
+
 
 \begin{thebibliography}{9}
 
@@ -149,13 +168,13 @@ dat de overall performance fors verbeterd is.
   \emph{A New Parallel Matrix Multiplication Algorithm on Distributed-Memory Concurrent Computers}.
   Soongsil University, Korea,
   1997.
-  
+
 \bibitem{rajab06}
   Rajab, Zarfoxx, Monrose, Terzis,
   \emph{A Multifaceted Approach to Understanding the Botnet Phenomenon}.
   Johns Hopkins University,
   2006.
-  
+
 
 \end{thebibliography}
 \end{document}
